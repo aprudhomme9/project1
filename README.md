@@ -1,3 +1,97 @@
+Black Jack
+
+Bet Screen:
+
+Game begins by user placing a bet. The user has an initial bank of $1000.
+
+User can click chips worth $1, $5, $25, $50, $100, $500. These values get added to the user's Total Bet amount, which can not exceed their bank. Bank is updated after every hand is played.
+
+Play Screen:
+
+Once the user has their bet amount set, they can click the deal button, which will deal two cards to the user and two cards to the dealer. These cards are removed from the deck.
+
+The cards will be dealt out of the deck, which will hold 3 traditional decks.  Cards will deal at random into dealer hand and player hand. Dealer will have only one card turned over.
+
+	If the user has 21, dealer will flip cards. If dealer hand = 21, then the player pushes. No change to player bank. Return to bet screen to bet & deal again.
+
+	If the user does not have 21, they have the option to hit, stay, or double down. Or split.
+
+	User Hits:
+
+	If user hits, another card will be dealt to user. Can continue to hit if hand amount < 21.
+
+		If new value > 21, the player busts	and the dealer wins. The bet amount is subtracted from player's bank.
+
+		If new value < 21, the player has the option to hit or stay again, and the process is repeated.
+
+		If user hits again and is <= 21, hand is evaluated. Dealer flips, and hand is evaluated.
+
+			If dealer hand < user hand and dealer hand <=17, dealer draws another card, and hand is evaluated.
+
+			If dealer hand > user hand, dealer wins. Bet amount subtracted from player's bank.
+
+			If dealer hand < user hand, user wins. Bet amount added to player's bank.
+
+	User Stays:
+
+	If user stays, the dealer will flip over their face-down card. Their hand will be evaluated.
+
+		If dealer hand < user hand AND dealer hand <= 17 , the dealer draws another card, and this is evaluated again.
+
+		If dealer hand is between 18 and 21, dealer hand is compared to player hand. If player hand is greater, player wins. If dealer hand is greater, dealer wins. If hands are equal, push.
+
+		If dealer hand > user hand AND dealer hand <= 21, dealer wins and the bet amount is subtracted from player's bank.
+
+		If dealer hand > 21, dealer busts and player wins. Bet amount is added to player's bank.
+
+	User Doubles Down:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ![GA logo](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png)
 # Project #1: The Game
 
