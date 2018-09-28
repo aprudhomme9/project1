@@ -67,7 +67,8 @@ const player = {
 	name: "",
 	hand: [],
 	hit () {
-
+		this.hand.push(cardsAvailable[0]);
+		cardsAvailable.splice(0, 1);
 	},
 	stay() {
 
@@ -84,7 +85,8 @@ const player = {
 const dealer = {
 	hand: [],
 	hit() {
-
+		this.hand.push(cardsAvailable[0]);
+		cardsAvailable.splice(0, 1);
 	}
 }
 
@@ -115,6 +117,8 @@ const game = {
 
 game.shuffle(cardsAvailable);
 game.deal();
+player.hit();
+dealer.hit();
 console.log(player.hand);
 console.log(dealer.hand);
 console.log(cardsAvailable);
