@@ -46,6 +46,8 @@ The cards will be dealt out of the deck, which will hold 3 traditional decks.  C
 
 	User Doubles Down:
 
+	User Splits:
+
 
 
 
