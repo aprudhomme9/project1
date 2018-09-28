@@ -1,6 +1,9 @@
 /**********************************
 Create a card class
-Create a deck class or object
+Create a deck array (array of objects)
+Use two for loops to loop through values and suits and push into deck array
+Instantiate each card by using the Card constructor method
+Include weight for J Q K A
 **********************************/
 console.log("running");
 class Card {
@@ -33,4 +36,24 @@ const buildDeck = () => {
 }
 
 buildDeck();
+console.log(deck);
+
+// shuffle using fisher-yates
+// generate random int
+// set temporary card to array[index]
+// set array[index] to array[random int]
+// set array[random int] to temporary card
+// return array
+
+const shuffle = (array) => {
+	for(i = 0; i < array.length -1; i++) {
+		let rand = Math.floor(Math.random() * array.length);
+		let temp = array[i];
+		array[i] = array[rand];
+		array[rand] = temp;
+
+	} return array;
+}
+
+shuffle(deck);
 console.log(deck);
