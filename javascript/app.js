@@ -81,12 +81,12 @@ const player = {
 
 }
 
-// const dealer = {
-// 	hand: [],
-// 	hit() {
+const dealer = {
+	hand: [],
+	hit() {
 
-// 	}
-// }
+	}
+}
 
 // begin building game object
 const cardsAvailable = deck;
@@ -102,15 +102,19 @@ const game = {
 	},
 
 	deal() {
-		player.hand.push(cardsAvailable[i]);
-		cardsAvailable.splice(i, 1);
+		for(let i = 0; i < 2; i ++) {
+			player.hand.push(cardsAvailable[0]);
+			cardsAvailable.splice(0, 1);
+			dealer.hand.push(cardsAvailable[0]);
+			cardsAvailable.splice(0,1);
+		}
 	}
 };
 
 
 
-game.shuffle(deck);
-console.log(deck);
+game.shuffle(cardsAvailable);
 game.deal();
-console.log(cardsAvailable);
 console.log(player.hand);
+console.log(dealer.hand);
+console.log(cardsAvailable);
