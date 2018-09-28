@@ -101,6 +101,10 @@ const game = {
 			console.log('dealer wins');
 		} else if(dealer.getHandVal() === player.getHandVal()) {
 			console.log('push');
+		} else if(dealer.getHandVal() > 21) {
+			console.log('dealer busts')
+		} else {
+			console.log('player busts')
 		}
 	},
 	shuffle(array) {
@@ -119,11 +123,16 @@ const game = {
 			cardsAvailable.splice(0, 1);
 			dealer.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0,1);
-		}
+		} 
+			$('#playerHand').text(player.getHandVal());
+			$('#dealerHand').text(dealer.getHandVal());
 	}
 };
 
-
+$('#playerHand').on('click', () => {
+	player.hit();
+	$('#playerHand').text(player.getHandVal());
+})
 
 game.shuffle(cardsAvailable);
 game.deal();
@@ -131,8 +140,6 @@ game.deal();
 // dealer.hit();
 console.log(player.hand);
 console.log(dealer.hand);
-console.log(player.getHandVal());
-console.log(dealer.getHandVal());
 game.compareHands();
 // player.hit();
 // dealer.hit();
