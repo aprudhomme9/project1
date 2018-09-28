@@ -45,27 +45,20 @@ set temporary card to array[index]
 set array[index] to array[random int]
 set array[random int] to temporary card
 return array
+
+MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
 **********/ 
-
-// const shuffle = (array) => {
-// 	for(i = array.length - 1; i > 0; i--) {
-// 		let rand = Math.floor(Math.random() * i);
-// 		let temp = array[i];
-// 		array[i] = array[rand];
-// 		array[rand] = temp;
-
-// 	} return array;
-// }
-
-// shuffle(deck);
-// console.log(deck);
-
-
-// build player object
 
 const player = {
 	name: "",
 	hand: [],
+	getHandVal () {
+		let total = 0;
+		for(let i = 0; i < this.hand.length; i++) {
+			total = total + this.hand[i].weight;
+		} 
+		return total;
+	},
 	hit () {
 		this.hand.push(cardsAvailable[0]);
 		cardsAvailable.splice(0, 1);
@@ -84,6 +77,13 @@ const player = {
 
 const dealer = {
 	hand: [],
+	getHandVal () {
+		let total = 0;
+		for(let i = 0; i < this.hand.length; i++) {
+			total = total + this.hand[i].weight;
+		} 
+		return total;
+	},
 	hit() {
 		this.hand.push(cardsAvailable[0]);
 		cardsAvailable.splice(0, 1);
@@ -93,6 +93,9 @@ const dealer = {
 // begin building game object
 const cardsAvailable = deck;
 const game = {
+	compareHands() {
+
+	},
 	shuffle(array) {
 		for(i = array.length - 1; i > 0; i--) {
 			let rand = Math.floor(Math.random() * i);
@@ -117,8 +120,10 @@ const game = {
 
 game.shuffle(cardsAvailable);
 game.deal();
-player.hit();
-dealer.hit();
+// player.hit();
+// dealer.hit();
 console.log(player.hand);
 console.log(dealer.hand);
+console.log(player.getHandVal());
+console.log(dealer.getHandVal());
 console.log(cardsAvailable);
