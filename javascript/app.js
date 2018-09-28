@@ -47,7 +47,7 @@ console.log(deck);
 
 const shuffle = (array) => {
 	for(i = array.length - 1; i > 0; i--) {
-		let rand = Math.floor(Math.random() * array.length);
+		let rand = Math.floor(Math.random() * i);
 		let temp = array[i];
 		array[i] = array[rand];
 		array[rand] = temp;
