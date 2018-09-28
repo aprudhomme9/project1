@@ -36,24 +36,81 @@ const buildDeck = () => {
 }
 
 buildDeck();
-console.log(deck);
+// console.log(deck);
 
-// shuffle using fisher-yates
-// generate random int
-// set temporary card to array[index]
-// set array[index] to array[random int]
-// set array[random int] to temporary card
-// return array
+/********* 
+shuffle using fisher-yates
+generate random int
+set temporary card to array[index]
+set array[index] to array[random int]
+set array[random int] to temporary card
+return array
+**********/ 
 
-const shuffle = (array) => {
-	for(i = array.length - 1; i > 0; i--) {
-		let rand = Math.floor(Math.random() * i);
-		let temp = array[i];
-		array[i] = array[rand];
-		array[rand] = temp;
+// const shuffle = (array) => {
+// 	for(i = array.length - 1; i > 0; i--) {
+// 		let rand = Math.floor(Math.random() * i);
+// 		let temp = array[i];
+// 		array[i] = array[rand];
+// 		array[rand] = temp;
 
-	} return array;
+// 	} return array;
+// }
+
+// shuffle(deck);
+// console.log(deck);
+
+
+// build player object
+
+const player = {
+	name: "",
+	hand: [],
+	hit () {
+
+	},
+	stay() {
+
+	},
+	doubleDown() {
+
+	},
+	split() {
+
+	}
+
 }
 
-shuffle(deck);
+// const dealer = {
+// 	hand: [],
+// 	hit() {
+
+// 	}
+// }
+
+// begin building game object
+const cardsAvailable = deck;
+const game = {
+	shuffle(array) {
+		for(i = array.length - 1; i > 0; i--) {
+			let rand = Math.floor(Math.random() * i);
+			let temp = array[i];
+			array[i] = array[rand];
+			array[rand] = temp;
+
+		} return array;
+	},
+
+	deal() {
+		player.hand.push(cardsAvailable[i]);
+		cardsAvailable.splice(i, 1);
+	}
+};
+
+
+
+game.shuffle(deck);
 console.log(deck);
+game.deal();
+console.log(cardsAvailable);
+console.log(player.hand);
