@@ -94,7 +94,14 @@ const dealer = {
 const cardsAvailable = deck;
 const game = {
 	compareHands() {
-
+		// just testing to make sure we can compare hand values and get a result after one deal
+		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+			console.log('player wins');
+		} else if(dealer.getHandVal() <= 21 && dealer.getHandVal() > player.getHandVal()) {
+			console.log('dealer wins');
+		} else if(dealer.getHandVal() === player.getHandVal()) {
+			console.log('push');
+		}
 	},
 	shuffle(array) {
 		for(i = array.length - 1; i > 0; i--) {
@@ -126,4 +133,9 @@ console.log(player.hand);
 console.log(dealer.hand);
 console.log(player.getHandVal());
 console.log(dealer.getHandVal());
+game.compareHands();
+// player.hit();
+// dealer.hit();
+// console.log(player.getHandVal());
+// console.log(dealer.getHandVal());
 console.log(cardsAvailable);
