@@ -60,12 +60,13 @@ const player = {
 		return total;
 	},
 	hit () {
-		this.hand.push(cardsAvailable[0]);
-		cardsAvailable.splice(0, 1);
+		if(this.getHandVal() < 21) {
+			this.hand.push(cardsAvailable[0]);
+			cardsAvailable.splice(0, 1);
+		}
 	},
-	stay() {
-		return true;
-	},
+	stay: null,
+
 	doubleDown() {
 
 	},
@@ -85,47 +86,52 @@ const dealer = {
 		return total;
 	},
 	hit() {
-		if(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+		while(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
+			$('#dealerHand').text(dealer.getHandVal());
 		}
 	}
 }
 
 // begin building game object
+// need a better way to have dealer process automate
 const game = {
 	play() {
 		this.shuffle(deck);
 		this.deal();
-		this.check();
+		// this.checkWinner();
 	},
-	check() {
-		if(player.stay() && this.dealerWins() === false) {
-			dealer.hit();
-		} this.updateStats();
+	checkWinner() {
+		this.updateStats();
 	},
 	playerWins() {
-		if(player.stay() && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
-			return true;
+		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+			return true;		
 		}
 	},
 	dealerWins() {
-		if(player.stay() && dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
+		if(player.stay === true && dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
 			return true;
 		}
-	}, 
+	},
+	push() {
+		if(player.stay === true && dealer.getHandVal() === player.getHandVal()) {
+			return true
+		}
+	},
 	updateStats() {
 		// just testing to make sure we can compare hand values and get a result after one deal
-		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+		if(this.playerWins()) {
 			console.log('player wins');
-		} else if(dealer.getHandVal() <= 21 && dealer.getHandVal() > player.getHandVal()) {
+		} else if (this.dealerWins()) {
 			console.log('dealer wins');
-		} else if(dealer.getHandVal() === player.getHandVal()) {
+		} else if (this.push()) {
 			console.log('push');
-		} else if(dealer.getHandVal() > 21) {
-			console.log('dealer busts')
+		} else if(player.getHandVal() > 21) {
+			console.log('player busts');
 		} else {
-			console.log('player busts')
+			console.log('dealer busts');
 		}
 	},
 	shuffle(array) {
@@ -156,9 +162,10 @@ $('#hit').on('click', () => {
 })
 
 $('#stay').on('click', () => {
-	player.stay();
+	player.stay = true;
 	dealer.hit();
-	$('#dealerHand').text(dealer.getHandVal());
+	game.checkWinner();
+	// game.isWinner();
 })
 
 game.play();
