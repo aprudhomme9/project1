@@ -6,26 +6,28 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
-	<div id="dealerCards">
-		<div>
+	<div class="hand">
+		<div class="cardImages">
 			<img id="dealer1" src=""></img>
 			<img id="dealer2" src=""></img>
+			<img id="dealerHit" src=""></img>
 		</div>
 		<h2 id="dealerHand"></h2>
 	</div>
+		
+		<div id="buttons">
+			<button id="hit">Hit Me</button>
+			<button id="stay">Stay</button>
+		</div>
 
-	<div id="playerCards">
-		<div id="cardImages">
+	<div class="hand">
+		<div class="cardImages">
 			<img id="card1" src="">
 			<img id ="card2" src="">
 			<img id="hitCard1" src="">
 		</div>
-		
+
 		<h2 id="playerHand"></h2>
-		
-		<button id="hit">Hit Me</button>
-		
-		<button id="stay">Stay</button>
 	</div>
 
 <!-- 	<div class="rcard" data-suit="spade" data-value="11" style="height: 100px; width: 300px; background-color: grey">

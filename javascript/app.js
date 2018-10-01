@@ -14,7 +14,7 @@ class Card {
 	}
 };
 
-const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+const values = ['02', '03', '04', '05', '06', '07', '08', '09', '10', 'J', 'Q', 'K', 'A'];
 
 const suits = ['hearts', 'diamonds', 'spades', 'clubs'];
 
@@ -138,6 +138,7 @@ const player = {
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
 		$('#hitCard1').hide();
+		$('#dealerHit').hide();
 		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	}
@@ -157,7 +158,8 @@ const dealer = {
 		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
-			
+			$('#dealerHit').show();
+			$('#dealerHit').attr('src', dealer.hand[2].image);
 		} $('#dealerHand').text(dealer.getHandVal());
 	}
 }
@@ -186,8 +188,8 @@ const game = {
 	reset() {
 		player.hand = [];
 		dealer.hand = [];
-		$('#playerHand').text('player');
-		$('#dealerHand').text('dealer');
+		// $('#playerHand').text('player');
+		// $('#dealerHand').text('dealer');
 		this.shuffle(deck);
 		this.deal();
 	},
