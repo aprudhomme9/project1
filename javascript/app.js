@@ -94,18 +94,23 @@ const dealer = {
 
 // begin building game object
 const game = {
+	play() {
+		this.shuffle(deck);
+		this.deal();
+		this.check();
+	},
 	check() {
 		if(player.stay() && this.dealerWins() === false) {
 			dealer.hit();
 		} this.updateStats();
 	},
 	playerWins() {
-		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+		if(player.stay() && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
 			return true;
 		}
 	},
 	dealerWins() {
-		if(dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
+		if(player.stay() && dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
 			return true;
 		}
 	}, 
@@ -145,19 +150,15 @@ const game = {
 	}
 };
 
-$('#playerHand').on('click', () => {
+$('#hit').on('click', () => {
 	player.hit();
 	$('#playerHand').text(player.getHandVal());
 })
 
-game.shuffle(deck);
-game.deal();
-console.log(player.hand);
-console.log(dealer.hand);
-// player.hit();
-// dealer.hit();
-// console.log(player.getHandVal());
-// console.log(dealer.getHandVal());
-console.log(cardsAvailable);
-// dealer.hit();
-game.check();
+$('#stay').on('click', () => {
+	player.stay();
+	dealer.hit();
+	$('#dealerHand').text(dealer.getHandVal());
+})
+
+game.play();
