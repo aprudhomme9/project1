@@ -85,22 +85,31 @@ const dealer = {
 		return total;
 	},
 	hit() {
-		if(player.stay() && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+		if(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
 		}
-	},
-	stay() {
-
 	}
 }
 
 // begin building game object
 const game = {
 	check() {
-
+		if(player.stay() && this.dealerWins() === false) {
+			dealer.hit();
+		} this.updateStats();
 	},
-	compareHands() {
+	playerWins() {
+		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+			return true;
+		}
+	},
+	dealerWins() {
+		if(dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
+			return true;
+		}
+	}, 
+	updateStats() {
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
 			console.log('player wins');
@@ -145,9 +154,10 @@ game.shuffle(deck);
 game.deal();
 console.log(player.hand);
 console.log(dealer.hand);
-game.compareHands();
 // player.hit();
 // dealer.hit();
 // console.log(player.getHandVal());
 // console.log(dealer.getHandVal());
 console.log(cardsAvailable);
+// dealer.hit();
+game.check();
