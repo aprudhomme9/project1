@@ -59,6 +59,7 @@ const player = {
 		} 
 		return total;
 	},
+	// player hits. can not hit if they bust. bust message will appear.
 	hit () {
 		if(this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
@@ -88,8 +89,9 @@ const dealer = {
 		} 
 		return total;
 	},
+	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
 	hit() {
-		if(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
 			$('#dealerHand').text(dealer.getHandVal());
@@ -103,13 +105,10 @@ const game = {
 	play() {
 		this.shuffle(deck);
 		this.deal();
-		// this.checkWinner();
+		this.checkWinner();
 	},
 	checkWinner() {
-		if(dealer.getHandVal() < player.getHandVal() && dealer.getHandVal() <=17) {
-			dealer.hit();
-			this.updateStats();
-		} else {
+		if(this.playerWins() || this.dealerWins() || this.push() || this.bust()) {
 			this.updateStats();
 		}
 		
@@ -126,7 +125,12 @@ const game = {
 	},
 	push() {
 		if(player.stay === true && dealer.getHandVal() === player.getHandVal()) {
-			return true
+			return true;
+		}
+	},
+	bust() {
+		if(player.getHandVal() > 21 || dealer.getHandVal() > 21) {
+			return true;
 		}
 	},
 	updateStats() {
