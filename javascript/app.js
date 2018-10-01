@@ -36,6 +36,59 @@ const buildDeck = () => {
 }
 
 buildDeck();
+
+deck[0].image = "images/2-hearts.png";
+deck[1].image = "images/2-diamonds.png";
+deck[2].image = "images/2-spades.png";
+deck[3].image = "images/2-clubs.png";
+deck[4].image = "images/3-hearts.png";
+deck[5].image = "images/3-diamonds.png";
+deck[6].image = "images/3-spades.png";
+deck[7].image = "images/3-clubs.png";
+deck[8].image = "images/4-hearts.png";
+deck[9].image = "images/4-diamonds.png"
+deck[10].image = "images/4-spades.png";
+deck[11].image = "images/4-clubs.png";
+deck[12].image = "images/5-hearts.png";
+deck[13].image = "images/5-diamonds.png"
+deck[14].image = "images/5-spades.png";
+deck[15].image = "images/5-clubs.png";
+deck[16].image = "images/6-hearts.png";
+deck[17].image = "images/6-diamonds.png"
+deck[18].image = "images/6-spades.png";
+deck[19].image = "images/6-clubs.png";
+deck[20].image = "images/7-hearts.png";
+deck[21].image = "images/7-diamonds.png"
+deck[22].image = "images/7-spades.png";
+deck[23].image = "images/7-clubs.png";
+deck[24].image = "images/8-hearts.png";
+deck[25].image = "images/8-diamonds.png"
+deck[26].image = "images/8-spades.png";
+deck[27].image = "images/8-clubs.png";
+deck[28].image = "images/9-hearts.png";
+deck[29].image = "images/9-diamonds.png"
+deck[30].image = "images/9-spades.png";
+deck[31].image = "images/9-clubs.png";
+deck[32].image = "images/10-hearts.png";
+deck[33].image = "images/10-diamonds.png"
+deck[34].image = "images/10-spades.png";
+deck[35].image = "images/10-clubs.png";
+deck[36].image = "images/jack-hearts.png"
+deck[37].image = "images/jack-diamonds.png"
+deck[38].image = "images/jack-spades.png"
+deck[39].image = "images/jack-clubs.png"
+deck[40].image = "images/queen-hearts.png"
+deck[41].image = "images/queen-diamonds.png"
+deck[42].image = "images/queen-spades.png"
+deck[43].image = "images/queen-clubs.png"
+deck[44].image = "images/king-hearts.png"
+deck[45].image = "images/king-diamonds.png"
+deck[46].image = "images/king-spades.png"
+deck[47].image = "images/king-clubs.png"
+deck[48].image = "images/ace-hearts.png"
+deck[49].image = "images/ace-diamonds.png"
+deck[50].image = "images/ace-spades.png"
+deck[51].image = "images/ace-clubs.png"
 // console.log(deck);
 
 /********* 
@@ -70,6 +123,7 @@ const player = {
 			game.updateStats();
 		}
 	},
+	// switches to true when they stay, which triggers other functionality like dealer hits.
 	stay: null,
 
 	doubleDown() {
@@ -77,8 +131,13 @@ const player = {
 	},
 	split() {
 
+	},
+	renderCards() {
+		$('#card1').attr('src', player.hand[0].image);
+		$('#card2').attr('src', player.hand[1].image);
+		$('#dealer1').attr('src', dealer.hand[0].image);
+		$('#dealer2').attr('src', dealer.hand[1].image);
 	}
-
 }
 
 const dealer = {
@@ -95,8 +154,8 @@ const dealer = {
 		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
-			$('#dealerHand').text(dealer.getHandVal());
-		}
+			
+		} $('#dealerHand').text(dealer.getHandVal());
 	}
 }
 
@@ -104,16 +163,17 @@ const dealer = {
 // need a better way to have dealer process automate
 const game = {
 	play() {
-		this.reset();
+		// this.reset();
 		this.shuffle(deck);
 		this.deal();
-		this.checkWinner();
+		player.renderCards();
+		// this.checkWinner();
 	},
 	checkWinner() {
-		if(this.playerWins() || this.dealerWins() || this.push() || this.bust()) {
+		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
 			this.updateStats();
 			console.log(player.score);
-			this.reset();
+			// this.reset();
 			// this.shuffle(deck);
 			// this.deal();
 		}
@@ -125,9 +185,11 @@ const game = {
 		dealer.hand = [];
 		$('#playerHand').text('player');
 		$('#dealerHand').text('dealer');
+		this.shuffle(deck);
+		this.deal();
 	},
 	playerWins() {
-		if((player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) || dealer.getHandVal() > 21) {
+		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()){
 			player.score += 1;
 			return true;		
 		}
@@ -142,9 +204,15 @@ const game = {
 			return true;
 		}
 	},
-	bust() {
-		if(player.getHandVal() > 21 || dealer.getHandVal() > 21) {
+	playerBust() {
+		if(!this.playerWins() && player.getHandVal() > 21) {
 			return true;
+		}
+	},
+	dealerBust() {
+		if(!this.dealerWins() && dealer.getHandVal() > 21) {
+			player.score += 1;
+			return true
 		}
 	},
 	updateStats() {
@@ -181,6 +249,7 @@ const game = {
 			$('#playerHand').text(player.getHandVal());
 			$('#dealerHand').text(dealer.getHandVal());
 	}
+
 };
 
 $('#hit').on('click', () => {
@@ -193,5 +262,8 @@ $('#stay').on('click', () => {
 	dealer.hit();
 	game.checkWinner();
 })
+
+// render cards
+
 
 game.play();
