@@ -19,7 +19,7 @@ const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'
 const suits = ['hearts', 'diamonds', 'spades', 'clubs'];
 
 const deck = [];
-
+const cardsAvailable = deck;
 const buildDeck = () => {
 	for(let i = 0; i < values.length; i++) {
 		for(let j = 0; j < suits.length; j++) {
@@ -64,7 +64,7 @@ const player = {
 		cardsAvailable.splice(0, 1);
 	},
 	stay() {
-
+		return true;
 	},
 	doubleDown() {
 
@@ -85,14 +85,21 @@ const dealer = {
 		return total;
 	},
 	hit() {
-		this.hand.push(cardsAvailable[0]);
-		cardsAvailable.splice(0, 1);
+		if(player.stay() && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+			this.hand.push(cardsAvailable[0]);
+			cardsAvailable.splice(0, 1);
+		}
+	},
+	stay() {
+
 	}
 }
 
 // begin building game object
-const cardsAvailable = deck;
 const game = {
+	check() {
+
+	},
 	compareHands() {
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
@@ -134,10 +141,8 @@ $('#playerHand').on('click', () => {
 	$('#playerHand').text(player.getHandVal());
 })
 
-game.shuffle(cardsAvailable);
+game.shuffle(deck);
 game.deal();
-// player.hit();
-// dealer.hit();
 console.log(player.hand);
 console.log(dealer.hand);
 game.compareHands();
