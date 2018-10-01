@@ -118,6 +118,8 @@ const player = {
 		if(this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
+			$('#hitCard1').show();
+			$('#hitCard1').attr('src', player.hand[2].image);
 		};
 		if(this.getHandVal() > 21) {
 			game.updateStats();
@@ -135,7 +137,8 @@ const player = {
 	renderCards() {
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
-		$('#dealer1').attr('src', dealer.hand[0].image);
+		$('#hitCard1').hide();
+		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	}
 }
@@ -247,7 +250,7 @@ const game = {
 			cardsAvailable.splice(0,1);
 		} 
 			$('#playerHand').text(player.getHandVal());
-			$('#dealerHand').text(dealer.getHandVal());
+			$('#dealerHand').text(dealer.hand[1].weight);
 	}
 
 };
@@ -259,6 +262,7 @@ $('#hit').on('click', () => {
 
 $('#stay').on('click', () => {
 	player.stay = true;
+	$('#dealer1').attr('src', dealer.hand[0].image);
 	dealer.hit();
 	game.checkWinner();
 })
