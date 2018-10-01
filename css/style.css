@@ -1,22 +1,26 @@
 body {
+	margin-top: 25px;
 	background-image: url("https://media.istockphoto.com/photos/abstract-green-felt-background-picture-id499233392?k=6&m=499233392&s=612x612&w=0&h=1pQVgiEFCuxAckjmZ3I9YV2l683g9t-dlGaoVJFikyU=");
 	/*background-position: center;*/
 	background-size: cover;
 	color: white;
 	text-align: center;
 	font-family: monospace;
-	border: 2px solid white;
+	border: 4px solid white;
+	border-radius: 12px;
+	padding: 25px;
 }
 
 img {
 	height: 275px;
 	width: 200px;
+	border-radius: 15px;
 }
 
 button {
 	height: 30px;
 	width: 100px;
-	border: 1px solid grey;
+	border: 2px solid green;
 	border-radius: 12px;
 	font-size: 12px;
 }
@@ -31,5 +35,14 @@ button {
 }
 
 #buttons {
+	display: flex;
+	flex-direction: row;
 	text-align: center;
+	justify-content: center;
+}
+
+#playerHand, #dealerHand {
+	border: 3px solid white;
+	padding: 10px;
+	border-radius: 5px;
 }

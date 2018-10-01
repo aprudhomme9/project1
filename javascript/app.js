@@ -118,6 +118,7 @@ const player = {
 		if(this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
+			$('#playerHand').text('Player: ' + player.getHandVal());
 			$('#hitCard1').show();
 			$('#hitCard1').attr('src', player.hand[2].image);
 		};
@@ -133,14 +134,6 @@ const player = {
 	},
 	split() {
 
-	},
-	renderCards() {
-		$('#card1').attr('src', player.hand[0].image);
-		$('#card2').attr('src', player.hand[1].image);
-		$('#hitCard1').hide();
-		$('#dealerHit').hide();
-		$('#dealer1').attr('src', 'images/card-back.png');
-		$('#dealer2').attr('src', dealer.hand[1].image);
 	}
 }
 
@@ -160,18 +153,26 @@ const dealer = {
 			cardsAvailable.splice(0, 1);
 			$('#dealerHit').show();
 			$('#dealerHit').attr('src', dealer.hand[2].image);
-		} $('#dealerHand').text(dealer.getHandVal());
+		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
 	}
 }
 
 // begin building game object
 // need a better way to have dealer process automate
 const game = {
+	renderCards() {
+		$('#card1').attr('src', player.hand[0].image);
+		$('#card2').attr('src', player.hand[1].image);
+		$('#hitCard1').hide();
+		$('#dealerHit').hide();
+		$('#dealer1').attr('src', 'images/card-back.png');
+		$('#dealer2').attr('src', dealer.hand[1].image);
+	},
 	play() {
 		// this.reset();
 		this.shuffle(deck);
 		this.deal();
-		player.renderCards();
+		this.renderCards();
 		// this.checkWinner();
 	},
 	checkWinner() {
@@ -251,15 +252,14 @@ const game = {
 			dealer.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0,1);
 		} 
-			$('#playerHand').text(player.getHandVal());
-			$('#dealerHand').text(dealer.hand[1].weight);
+			$('#playerHand').text('Player: ' + player.getHandVal());
+			$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
 	}
 
 };
 
 $('#hit').on('click', () => {
 	player.hit();
-	$('#playerHand').text(player.getHandVal());
 })
 
 $('#stay').on('click', () => {
