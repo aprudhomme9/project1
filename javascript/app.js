@@ -104,6 +104,7 @@ const dealer = {
 // need a better way to have dealer process automate
 const game = {
 	play() {
+		this.reset();
 		this.shuffle(deck);
 		this.deal();
 		this.checkWinner();
@@ -113,19 +114,20 @@ const game = {
 			this.updateStats();
 			console.log(player.score);
 			this.reset();
-			this.shuffle(deck);
-			this.deal();
+			// this.shuffle(deck);
+			// this.deal();
 		}
 		
 	},
+	// this will reset after a winner is decided so that we can play again
 	reset() {
 		player.hand = [];
 		dealer.hand = [];
-		$('#playerHand').text('0');
-		$('#dealerHand').text('0');
+		$('#playerHand').text('player');
+		$('#dealerHand').text('dealer');
 	},
 	playerWins() {
-		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+		if((player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) || dealer.getHandVal() > 21) {
 			player.score += 1;
 			return true;		
 		}
@@ -156,7 +158,6 @@ const game = {
 		} else if(player.getHandVal() > 21) {
 			console.log('player busts');
 		} else if (dealer.getHandVal() > 21) {
-			player.score += 1;
 			console.log('dealer busts');
 		}
 	},
