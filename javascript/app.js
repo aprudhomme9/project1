@@ -112,8 +112,17 @@ const game = {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.bust()) {
 			this.updateStats();
 			console.log(player.score);
+			this.reset();
+			this.shuffle(deck);
+			this.deal();
 		}
 		
+	},
+	reset() {
+		player.hand = [];
+		dealer.hand = [];
+		$('#playerHand').text('0');
+		$('#dealerHand').text('0');
 	},
 	playerWins() {
 		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
