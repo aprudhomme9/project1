@@ -50,6 +50,7 @@ MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
 **********/ 
 
 const player = {
+	score: 0,
 	name: "",
 	hand: [],
 	getHandVal () {
@@ -110,11 +111,13 @@ const game = {
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.bust()) {
 			this.updateStats();
+			console.log(player.score);
 		}
 		
 	},
 	playerWins() {
 		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+			player.score += 1;
 			return true;		
 		}
 	},
@@ -144,6 +147,7 @@ const game = {
 		} else if(player.getHandVal() > 21) {
 			console.log('player busts');
 		} else if (dealer.getHandVal() > 21) {
+			player.score += 1;
 			console.log('dealer busts');
 		}
 	},
