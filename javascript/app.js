@@ -63,6 +63,9 @@ const player = {
 		if(this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
+		};
+		if(this.getHandVal() > 21) {
+			game.updateStats();
 		}
 	},
 	stay: null,
@@ -86,7 +89,7 @@ const dealer = {
 		return total;
 	},
 	hit() {
-		while(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+		if(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
 			$('#dealerHand').text(dealer.getHandVal());
@@ -103,7 +106,13 @@ const game = {
 		// this.checkWinner();
 	},
 	checkWinner() {
-		this.updateStats();
+		if(dealer.getHandVal() < player.getHandVal() && dealer.getHandVal() <=17) {
+			dealer.hit();
+			this.updateStats();
+		} else {
+			this.updateStats();
+		}
+		
 	},
 	playerWins() {
 		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
@@ -130,7 +139,7 @@ const game = {
 			console.log('push');
 		} else if(player.getHandVal() > 21) {
 			console.log('player busts');
-		} else {
+		} else if (dealer.getHandVal() > 21) {
 			console.log('dealer busts');
 		}
 	},
@@ -165,7 +174,6 @@ $('#stay').on('click', () => {
 	player.stay = true;
 	dealer.hit();
 	game.checkWinner();
-	// game.isWinner();
 })
 
 game.play();
