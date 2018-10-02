@@ -27,7 +27,6 @@ button {
 }
 
 .hand {
-	margin-top: 25px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -56,4 +55,9 @@ button {
 
 #bank {
 	text-align: right;
+}
+
+#deck {
+	text-align: right;
+	color: lavender;
 }

@@ -248,29 +248,39 @@ const game = {
 		if(this.playerWins()) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+player.bank);
-			$('#bank').velocity('callout.swing', 2000);
-			console.log('u win');
+			$('#bank').velocity('callout.flash', 2000);
+			$('#message').text('YOU WIN');
+			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerWins()) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+player.bank);
-			$('#bank').velocity('callout.bounce', 2000);
-			console.log('sad dealer won');
+			$('#bank').velocity('callout.flash', 2000);
+			$('#message').text('DEALER WINS');
+			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').velocity('transition.swoopOut')
 		} else if (this.push()) {
 			$('#bank').text('BANK: $'+player.bank);
 			$('#bank').velocity('callout.shake', 2000);
-			console.log('issa push');
+			$('#message').text('PUSH');
+			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').velocity('transition.swoopOut')
 		} else if(player.getHandVal() > 21) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+player.bank);
-			$('#bank').velocity('callout.bounce', 2000)
+			$('#bank').velocity('callout.flash', 2000)
 			player.stay === true;
 			this.dealerFlipCard();
-			console.log('u buss');
+			$('#message').text('YOU BUST');
+			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').velocity('transition.swoopOut')
 		} else if (dealer.getHandVal() > 21) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+player.bank);
-			$('#bank').velocity('callout.swing', 2000);
-			console.log('dealer buss');
+			$('#bank').velocity('callout.flash', 2000);
+			$('#message').text('DEALER BUSTS');
+			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').velocity('transition.swoopOut')
 		}
 	},
 	shuffle(array) {
@@ -291,6 +301,7 @@ const game = {
 		} 
 			$('#playerHand').text('Player: ' + player.getHandVal());
 			$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
+			$('#deck').text('Deck: ' + deck.length);
 	},
 	dealerFlipCard() {
 		$('#dealer1').attr('src', dealer.hand[0].image);
