@@ -295,6 +295,10 @@ const game = {
 $('#hit').on('click', () => {
 	player.hit();
 	player.hasHit = true;
+	if(player.getHandVal() > 21) {
+		game.dealerFlipCard();
+		game.checkWinner();
+	}
 })
 
 $('#stay').on('click', () => {
