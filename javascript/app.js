@@ -116,13 +116,19 @@ const player = {
 	},
 	// player hits. can not hit if they bust. bust message will appear.
 	hit () {
-		if(this.getHandVal() < 21) {
+		if(this.hasHit === null && this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
 			$('#playerHand').text('Player: ' + player.getHandVal());
 			$('#hitCard1').show();
 			$('#hitCard1').attr('src', player.hand[2].image);
-		};
+		} else if(this.hasHit) {
+			this.hand.push(cardsAvailable[0]);
+			cardsAvailable.splice(0, 1);
+			$('#playerHand').text('Player: ' + player.getHandVal());
+			$('#hitCard2').show();
+			$('#hitCard2').attr('src', player.hand[3].image);
+		}
 		if(this.getHandVal() > 21) {
 			game.updateStats();
 		}
@@ -132,7 +138,8 @@ const player = {
 	},
 	split() {
 
-	}
+	},
+	hasHit: null
 }
 
 const dealer = {
@@ -149,7 +156,6 @@ const dealer = {
 		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
-			$('#dealer1').attr('src', dealer.hand[0].image);
 			$('#dealerHit').delay(100000).show();
 			$('#dealerHit').attr('src', dealer.hand[2].image);
 		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
@@ -160,6 +166,7 @@ const dealer = {
 // need a better way to have dealer process automate
 const game = {
 	renderCards() {
+		$('#deal').hide();
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
 		$('#hitCard1').hide();
@@ -176,15 +183,25 @@ const game = {
 	},
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
+			$('#deal').show();
 			this.updateStats();
 		}
 	},
 	// this will reset after a winner is decided so that we can play again
 	reset() {
+		$('#deal').hide();
+		player.hasHit = null;
 		player.hand = [];
 		dealer.hand = [];
+		// this isn't working -- need to figure out how to rebuild deck
+		// if(cardsAvailable.length < 10) {
+		// 	buildDeck();
+		// 	console.log('building deck');
+		// }
 		this.shuffle(deck);
 		this.deal();
+		this.renderCards();
+		// this.checkWinner();
 	},
 	playerWins() {
 		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
@@ -203,6 +220,8 @@ const game = {
 	},
 	playerBust() {
 		if(!this.playerWins() && player.getHandVal() > 21) {
+			player.stay === true;
+			this.dealerFlipCard();
 			return true;
 		}
 	},
@@ -243,18 +262,27 @@ const game = {
 		} 
 			$('#playerHand').text('Player: ' + player.getHandVal());
 			$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
+	},
+	dealerFlipCard() {
+		$('#dealer1').attr('src', dealer.hand[0].image);
 	}
 
 };
 
 $('#hit').on('click', () => {
 	player.hit();
+	player.hasHit = true;
 })
 
 $('#stay').on('click', () => {
 	player.stay = true;
+	game.dealerFlipCard();
 	dealer.hit();
 	game.checkWinner();
+})
+
+$('#deal').on('click', () => {
+	game.reset();
 })
 
 // render cards

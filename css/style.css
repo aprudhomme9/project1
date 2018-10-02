@@ -15,6 +15,7 @@ img {
 	height: 275px;
 	width: 200px;
 	border-radius: 15px;
+	margin: 5px;
 }
 
 button {
@@ -45,4 +46,10 @@ button {
 	border: 3px solid white;
 	padding: 10px;
 	border-radius: 5px;
+}
+
+.cardImages {
+	display: flex;
+	flex-direction: row;
+	flex-grow: 4;
 }
