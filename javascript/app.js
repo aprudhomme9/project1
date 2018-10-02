@@ -107,6 +107,7 @@ const player = {
 	name: "",
 	hand: [],
 	stay: null,
+	hasHit: null,
 	getHandVal () {
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
@@ -115,6 +116,8 @@ const player = {
 		return total;
 	},
 	// player hits. can not hit if they bust. bust message will appear.
+	// create state of hasHit to allow for the 4th card played to render. should do same for dealer
+
 	hit () {
 		if(this.hasHit === null && this.getHandVal() < 21) {
 			this.hand.push(cardsAvailable[0]);
@@ -129,17 +132,13 @@ const player = {
 			$('#hitCard2').show();
 			$('#hitCard2').attr('src', player.hand[3].image);
 		}
-		if(this.getHandVal() > 21) {
-			game.updateStats();
-		}
 	},
 	doubleDown() {
 
 	},
 	split() {
 
-	},
-	hasHit: null
+	}
 }
 
 const dealer = {
@@ -233,15 +232,23 @@ const game = {
 	updateStats() {
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(this.playerWins()) {
-			console.log('player wins');
+			player.bank += 100;
+			$('#bank').text('BANK: $'+player.bank);
+			console.log('u win');
 		} else if (this.dealerWins()) {
-			console.log('dealer wins');
+			player.bank -= 100;
+			$('#bank').text('BANK: $'+player.bank);
+			console.log('sad dealer won');
 		} else if (this.push()) {
-			console.log('push');
+			console.log('issa push');
 		} else if(player.getHandVal() > 21) {
-			console.log('player busts');
+			player.bank -= 100;
+			$('#bank').text('BANK: $'+player.bank);
+			console.log('u buss');
 		} else if (dealer.getHandVal() > 21) {
-			console.log('dealer busts');
+			player.bank += 100;
+			$('#bank').text('BANK: $'+player.bank);
+			console.log('dealer buss');
 		}
 	},
 	shuffle(array) {
@@ -265,6 +272,11 @@ const game = {
 	},
 	dealerFlipCard() {
 		$('#dealer1').attr('src', dealer.hand[0].image);
+	},
+	showWinner() {
+		if(this.playerWins()) {
+
+		}
 	}
 
 };
@@ -284,7 +296,8 @@ $('#stay').on('click', () => {
 $('#deal').on('click', () => {
 	game.reset();
 })
-
+// bet button --> need
+// 
 // render cards
 
 
