@@ -157,6 +157,11 @@ const dealer = {
 			deck.splice(0, 1);
 			$('#dealerHit').delay(100000).show();
 			$('#dealerHit').attr('src', dealer.hand[2].image);
+
+			if(dealer.hand.length >= 4) {
+				$('#dealerHit2').show();
+				$('#dealerHit2').attr('src', dealer.hand[3].image);
+			}
 		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
 	}
 }
