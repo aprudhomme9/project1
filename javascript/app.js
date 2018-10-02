@@ -103,9 +103,10 @@ MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
 **********/ 
 
 const player = {
-	score: 0,
+	bank: 1000,
 	name: "",
 	hand: [],
+	stay: null,
 	getHandVal () {
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
@@ -126,9 +127,6 @@ const player = {
 			game.updateStats();
 		}
 	},
-	// switches to true when they stay, which triggers other functionality like dealer hits.
-	stay: null,
-
 	doubleDown() {
 
 	},
@@ -151,7 +149,8 @@ const dealer = {
 		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
 			this.hand.push(cardsAvailable[0]);
 			cardsAvailable.splice(0, 1);
-			$('#dealerHit').show();
+			$('#dealer1').attr('src', dealer.hand[0].image);
+			$('#dealerHit').delay(100000).show();
 			$('#dealerHit').attr('src', dealer.hand[2].image);
 		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
 	}
@@ -164,39 +163,31 @@ const game = {
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
 		$('#hitCard1').hide();
+		$('#hitCard2').hide();
 		$('#dealerHit').hide();
+		$('#dealerHit2').hide();
 		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
 	play() {
-		// this.reset();
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-		// this.checkWinner();
 	},
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
 			this.updateStats();
-			console.log(player.score);
-			// this.reset();
-			// this.shuffle(deck);
-			// this.deal();
 		}
-		
 	},
 	// this will reset after a winner is decided so that we can play again
 	reset() {
 		player.hand = [];
 		dealer.hand = [];
-		// $('#playerHand').text('player');
-		// $('#dealerHand').text('dealer');
 		this.shuffle(deck);
 		this.deal();
 	},
 	playerWins() {
-		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()){
-			player.score += 1;
+		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
 			return true;		
 		}
 	},
@@ -217,7 +208,6 @@ const game = {
 	},
 	dealerBust() {
 		if(!this.dealerWins() && dealer.getHandVal() > 21) {
-			player.score += 1;
 			return true
 		}
 	},
@@ -244,7 +234,6 @@ const game = {
 
 		} return array;
 	},
-
 	deal() {
 		for(let i = 0; i < 2; i ++) {
 			player.hand.push(cardsAvailable[0]);
@@ -264,7 +253,6 @@ $('#hit').on('click', () => {
 
 $('#stay').on('click', () => {
 	player.stay = true;
-	$('#dealer1').attr('src', dealer.hand[0].image);
 	dealer.hit();
 	game.checkWinner();
 })
