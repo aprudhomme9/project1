@@ -53,3 +53,7 @@ button {
 	flex-direction: row;
 	flex-grow: 4;
 }
+
+#bank {
+	text-align: right;
+}
