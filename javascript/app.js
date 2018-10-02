@@ -143,11 +143,18 @@ const player = {
 
 const dealer = {
 	hand: [],
+	checkAces() {
+		for(let i = 0; i < this.hand.length; i++) {
+			if(this.hand[i].value === 'A') {
+				return true;
+			}
+		}
+	},
 	getHandVal () {
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
 			total = total + this.hand[i].weight;
-		} 
+		}
 		return total;
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
@@ -165,6 +172,15 @@ const dealer = {
 		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
 	}
 }
+
+/********************
+Ace logic...
+If the hand of the player or dealer is > 21 and contains one or more aces, the weight of the aces converts to 1 rather than 11.
+Check if hand is > 21
+Check if hand contains ace using a loop
+If it contains an ace
+The weight of the ace is 1
+********************/
 
 // begin building game object
 // need a better way to have dealer process automate

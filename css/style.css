@@ -18,6 +18,12 @@ img {
 	margin: 5px;
 }
 
+.top {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
 button {
 	height: 30px;
 	width: 100px;
