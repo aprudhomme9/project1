@@ -123,14 +123,14 @@ const player = {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
 			$('#playerHand').text('Player: ' + player.getHandVal());
-			$('#hitCard1').show();
 			$('#hitCard1').attr('src', player.hand[2].image);
+			$('#hitCard1').velocity('transition.flipYIn', 1000);
 		} else if(this.hasHit) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
 			$('#playerHand').text('Player: ' + player.getHandVal());
-			$('#hitCard2').show();
 			$('#hitCard2').attr('src', player.hand[3].image);
+			$('#hitCard2').velocity('transition.flipYIn', 1000);
 		}
 	},
 	doubleDown() {
@@ -152,16 +152,16 @@ const dealer = {
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
 	hit() {
-		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal() && player.getHandVal() <= 21) {
+		while(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal() && player.getHandVal() <= 21) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
-			$('#dealerHit').delay(100000).show();
 			$('#dealerHit').attr('src', dealer.hand[2].image);
-
-			if(dealer.hand.length >= 4) {
-				$('#dealerHit2').show();
-				$('#dealerHit2').attr('src', dealer.hand[3].image);
+			$('#dealerHit').velocity('transition.flipYIn', 1000);	
 			}
+// can I do this with a loop...
+			if(dealer.hand.length >= 4) {
+				$('#dealerHit2').attr('src', dealer.hand[3].image);
+				$('#dealerHit2').velocity('transition.flipYIn', 1000);
 		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
 	}
 }
@@ -248,22 +248,28 @@ const game = {
 		if(this.playerWins()) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').velocity('callout.swing', 2000);
 			console.log('u win');
 		} else if (this.dealerWins()) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').velocity('callout.bounce', 2000);
 			console.log('sad dealer won');
 		} else if (this.push()) {
+			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').velocity('callout.shake', 2000);
 			console.log('issa push');
 		} else if(player.getHandVal() > 21) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').velocity('callout.bounce', 2000)
 			player.stay === true;
 			this.dealerFlipCard();
 			console.log('u buss');
 		} else if (dealer.getHandVal() > 21) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').velocity('callout.swing', 2000);
 			console.log('dealer buss');
 		}
 	},
@@ -288,6 +294,7 @@ const game = {
 	},
 	dealerFlipCard() {
 		$('#dealer1').attr('src', dealer.hand[0].image);
+		$('#dealer1').velocity('transition.flipYIn', 1000);
 	},
 	showWinner() {
 		if(this.playerWins()) {
