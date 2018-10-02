@@ -152,7 +152,7 @@ const dealer = {
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
 	hit() {
-		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal()) {
+		while(player.stay && this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal() && player.getHandVal() <= 21) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
 			$('#dealerHit').delay(100000).show();
@@ -180,6 +180,7 @@ const game = {
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
+		this.checkWinner();
 	},
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
@@ -229,8 +230,6 @@ const game = {
 	},
 	playerBust() {
 		if(!this.playerWins() && player.getHandVal() > 21) {
-			player.stay === true;
-			this.dealerFlipCard();
 			return true;
 		}
 	},
@@ -254,6 +253,8 @@ const game = {
 		} else if(player.getHandVal() > 21) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+player.bank);
+			player.stay === true;
+			this.dealerFlipCard();
 			console.log('u buss');
 		} else if (dealer.getHandVal() > 21) {
 			player.bank += 100;
