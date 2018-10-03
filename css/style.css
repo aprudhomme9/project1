@@ -55,7 +55,7 @@ button {
 .cardImages {
 	display: flex;
 	flex-direction: row;
-	flex-grow: 4;
+	flex-grow: 5;
 }
 
 #bank {

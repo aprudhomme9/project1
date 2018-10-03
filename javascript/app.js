@@ -137,6 +137,9 @@ const player = {
 			$('#playerHand').text('Player: ' + this.getHandTotal());
 			$('#hitCard2').attr('src', this.hand[3].image);
 			$('#hitCard2').velocity('transition.flipYIn', 1000);
+		} if (this.hand.length >= 5) {
+				$('#hitCard3').attr('src', this.hand[4].image);
+				$('#hitCard3').velocity('transition.flipYIn', 1000);
 		}
 	},
 	doubleDown() {
@@ -169,11 +172,16 @@ const dealer = {
 			$('#dealerHit').attr('src', this.hand[2].image);
 			$('#dealerHit').velocity('transition.flipYIn', 1000);	
 			}
-// can I do this with a loop...
+
 			if(this.hand.length >= 4) {
 				$('#dealerHit2').attr('src', this.hand[3].image);
 				$('#dealerHit2').velocity('transition.flipYIn', 1000);
-		} $('#dealerHand').text('Dealer: ' + this.getHandTotal());
+		} 	if (this.hand.length >= 5) {
+				$('#dealerHit3').attr('src', this.hand[4].image);
+				$('#dealerHit3').velocity('transition.flipYIn', 1000);
+		}
+
+		$('#dealerHand').text('Dealer: ' + this.getHandTotal());
 	}
 }
 
@@ -194,6 +202,8 @@ const game = {
 		$('#card2').attr('src', player.hand[1].image);
 		$('#hitCard1').hide();
 		$('#hitCard2').hide();
+		$('#hitCard3').hide();
+		$('#dealerHit3').hide();
 		$('#dealerHit').hide();
 		$('#dealerHit2').hide();
 		$('#dealer1').attr('src', 'images/card-back.png');
