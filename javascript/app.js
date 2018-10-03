@@ -108,23 +108,17 @@ const player = {
 	hand: [],
 	stay: null,
 	hasHit: null,
-	numberAces: 0,
-	checkAces() {
-		for(let j = 0; j < this.hand.length; j++) {
-			if(this.hand[j].value === 'A') {
-				this.numberAces += 1;
-				return true;
-				console.log('heres an ace')
-			} 
-		}
-	},
 	getHandTotal() {
+		let aces = 0;
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
-				total = total + this.hand[i].weight;
+			if(this.hand[i].value === 'A') {
+					aces += 1;
+			}
+			total = total + this.hand[i].weight;
 		}
-		if(this.numberAces > 0 && this.getHandTotal() > 21) {
-			total = total - (10 * this.numberAces);
+		if(aces > 0 && total > 21) {
+			total = total - (10 * aces);
 		} return total;
 	},
 	// player hits. can not hit if they bust. bust message will appear.
@@ -154,19 +148,17 @@ const player = {
 }
 const dealer = {
 	hand: [],
-	numberAces: 0,
-	checkAces() {
-		for(let i = 0; i < this.hand.length; i++) {
-			if(this.hand[i].value === 'A') {
-				this.numberAces += 1;
-				return true;
-			}
-		}
-	},
 	getHandTotal() {
+		let aces = 0;
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
-				total = total + this.hand[i].weight;
+			if(this.hand[i].value === 'A') {
+				aces += 1;
+			}
+			total = total + this.hand[i].weight;
+		}
+		if(aces > 0 && total > 21) {
+			total = total - (10 * aces);
 		} return total;
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
@@ -210,7 +202,6 @@ const game = {
 	play() {
 		buildDeck();
 		this.shuffle(deck);
-		player.checkAces();
 		this.deal();
 		this.renderCards();
 		this.checkWinner();
@@ -233,15 +224,12 @@ const game = {
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-		player.checkAces();
 		// this.checkWinner();
 	},
 	clearHands() {
 		player.hand=[];
 		dealer.hand=[];
 		player.hasHit = null;
-		player.numberAces = 0;
-		dealer.numberAces = 0;
 	},
 	makeNewDeck() {
 		this.clearHands();
@@ -251,17 +239,17 @@ const game = {
 		this.renderCards();
 	},
 	playerWins() {
-		if(player.stay === true && player.getHandTotal() <= 21 && player.getHandTotal() > dealer.getHandTotal()) {
+		if(player.stay && player.getHandTotal() <= 21 && player.getHandTotal() > dealer.getHandTotal()) {
 			return true;		
 		}
 	},
 	dealerWins() {
-		if(player.stay === true && dealer.getHandTotal() > player.getHandTotal() && dealer.getHandTotal() <= 21) {
+		if(player.stay && dealer.getHandTotal() > player.getHandTotal() && dealer.getHandTotal() <= 21) {
 			return true;
 		}
 	},
 	push() {
-		if(player.stay === true && dealer.getHandTotal() === player.getHandTotal()) {
+		if(player.stay && dealer.getHandTotal() === player.getHandTotal()) {
 			return true;
 		}
 	},
