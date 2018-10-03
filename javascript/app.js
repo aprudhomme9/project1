@@ -104,10 +104,11 @@ MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
 
 const player = {
 	bank: 1000,
-	name: "",
 	hand: [],
 	stay: null,
 	hasHit: null,
+	split1: [],
+	split2: [],
 	getHandTotal() {
 		let aces = 0;
 		let total = 0;
@@ -143,7 +144,17 @@ const player = {
 
 	},
 	split() {
-
+		// move first card into new hand and second card into new hand
+		// need to hit for both hands by pushing card from deck into both
+		// first, the first split card is shown and hit
+		// player can then hit or stay on that hand
+		// if hit, another card is added and you need to check winner
+		// if stay, the second split card is brought in
+		// then, the second split card is shown and hit
+		// player can then hit or stay on that hand
+		// if hit, another card is added and winner is checked
+		this.split1.push(this.hand[0]);
+		this.split2.push(this.hand[1]);
 	}
 }
 const dealer = {
@@ -171,15 +182,15 @@ const dealer = {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
 			$('#dealerHit').attr('src', this.hand[2].image);
-			$('#dealerHit').velocity('transition.flipYIn', 1000);	
+			$('#dealerHit').delay(1000).velocity('transition.flipYIn', 1000);	
 			}
 
 			if(this.hand.length >= 4) {
 				$('#dealerHit2').attr('src', this.hand[3].image);
-				$('#dealerHit2').velocity('transition.flipYIn', 1000);
+				$('#dealerHit2').delay(1000).velocity('transition.flipYIn', 1000);
 		} 	if (this.hand.length >= 5) {
 				$('#dealerHit3').attr('src', this.hand[4].image);
-				$('#dealerHit3').velocity('transition.flipYIn', 1000);
+				$('#dealerHit3').delay(1000).velocity('transition.flipYIn', 1000);
 		}
 
 		$('#dealerHand').text('Dealer: ' + this.getHandTotal());
@@ -282,38 +293,38 @@ const game = {
 		if(this.playerWins()) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+ player.bank);
-			$('#bank').velocity('callout.flash', 2000);
+			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('YOU WIN');
-			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerWins()) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+ player.bank);
-			$('#bank').velocity('callout.flash', 2000);
+			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER WINS');
-			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.push()) {
 			$('#bank').text('BANK: $'+ player.bank);
-			$('#bank').velocity('callout.shake', 2000);
+			$('#bank').delay(2000).velocity('callout.shake', 2000);
 			$('#message').text('PUSH');
-			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if(player.getHandTotal() > 21) {
 			player.bank -= 100;
 			$('#bank').text('BANK: $'+ player.bank);
-			$('#bank').velocity('callout.flash', 2000)
+			$('#bank').delay(2000).velocity('callout.flash', 2000)
 			player.stay === true;
 			this.dealerFlipCard();
 			$('#message').text('YOU BUST');
-			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (dealer.getHandTotal() > 21) {
 			player.bank += 100;
 			$('#bank').text('BANK: $'+ player.bank);
-			$('#bank').velocity('callout.flash', 2000);
+			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER BUSTS');
-			$('#message').velocity('transition.swoopIn', 2000);
+			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		}
 	},
