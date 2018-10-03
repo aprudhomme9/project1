@@ -104,6 +104,7 @@ MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
 
 const player = {
 	bank: 1000,
+	betAmount: 0,
 	hand: [],
 	stay: null,
 	hasHit: null,
@@ -155,6 +156,22 @@ const player = {
 		// if hit, another card is added and winner is checked
 		this.split1.push(this.hand[0]);
 		this.split2.push(this.hand[1]);
+		$('#playerHand').text('Player: ' + this.split1[0].weight + ', ' + this.split2[0].weight);
+	},
+	hitOnSplit() {
+		this.split1.push(deck[0]);
+		deck.splice(0, 1);
+		this.split2.push(deck[0]);
+		deck.splice(0, 1);
+	},
+	getSplitValue() {
+		let firstTotal = 0;
+		let secondTotal = 0;
+		for(let i = 0; i < split1.length; i++) {
+			firstTotal = firstTotal + this.split1[i].weight;
+			secondTotal = secondTotal + this.split2[i].weight;
+		} console.log(firstTotal);
+			console.log(secondTotal);
 	}
 }
 const dealer = {
@@ -185,15 +202,16 @@ const dealer = {
 			$('#dealerHit').delay(1000).velocity('transition.flipYIn', 1000);	
 			}
 
-			if(this.hand.length >= 4) {
-				$('#dealerHit2').attr('src', this.hand[3].image);
-				$('#dealerHit2').delay(1000).velocity('transition.flipYIn', 1000);
-		} 	if (this.hand.length >= 5) {
-				$('#dealerHit3').attr('src', this.hand[4].image);
-				$('#dealerHit3').delay(1000).velocity('transition.flipYIn', 1000);
+		if(this.hand.length >= 4) {
+			$('#dealerHit2').attr('src', this.hand[3].image);
+			$('#dealerHit2').delay(1000).velocity('transition.flipYIn', 1000);
+		} 
+		if(this.hand.length >= 5) {
+			$('#dealerHit3').attr('src', this.hand[4].image);
+			$('#dealerHit3').delay(1000).velocity('transition.flipYIn', 1000);
 		}
 
-		$('#dealerHand').text('Dealer: ' + this.getHandTotal());
+		$('#dealerHand').delay(2000).text('Dealer: ' + this.getHandTotal());
 	}
 }
 
@@ -209,6 +227,9 @@ The weight of the ace is 1
 // begin building game object
 const game = {
 	renderCards() {
+		$('#splitHit').hide();
+		$('#splitStay').hide();
+		$('#split').hide();
 		$('#deal').hide();
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
@@ -220,6 +241,7 @@ const game = {
 		$('#dealerHit2').hide();
 		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', dealer.hand[1].image);
+		$('#message').hide();
 	},
 	play() {
 		buildDeck();
@@ -245,6 +267,7 @@ const game = {
 		$('#hit').show();
 		$('#stay').show();
 		$('#deal').hide();
+		player.betAmount = 0;
 		this.clearHands();
 		this.shuffle(deck);
 		this.deal();
@@ -252,6 +275,8 @@ const game = {
 		// this.checkWinner();
 	},
 	clearHands() {
+		player.split1=[];
+		player.split2=[];
 		player.hand=[];
 		dealer.hand=[];
 		player.hasHit = null;
@@ -291,14 +316,14 @@ const game = {
 	updateStats() {
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(this.playerWins()) {
-			player.bank += 100;
+			player.bank += player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('YOU WIN');
 			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerWins()) {
-			player.bank -= 100;
+			player.bank -= player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER WINS');
@@ -310,8 +335,8 @@ const game = {
 			$('#message').text('PUSH');
 			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
-		} else if(player.getHandTotal() > 21) {
-			player.bank -= 100;
+		} else if(this.playerBust()) {
+			player.bank -= player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000)
 			player.stay === true;
@@ -319,8 +344,8 @@ const game = {
 			$('#message').text('YOU BUST');
 			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
-		} else if (dealer.getHandTotal() > 21) {
-			player.bank += 100;
+		} else if (this.dealerBust()) {
+			player.bank += player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER BUSTS');
@@ -351,6 +376,25 @@ const game = {
 	dealerFlipCard() {
 		$('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer1').velocity('transition.flipYIn', 1000);
+	},
+	hideButtons() {
+		$('#hit').hide();
+		$('#stay').hide();
+	},
+	showSplitButtons() {
+		$('#splitHit').show();
+		$('#splitStay').show();
+	},
+	changeBetValue() {
+		$('#betAmount').text('Bet: $' + player.betAmount);
+	},
+	moveSplitCards() {
+		$('#hitCard2').velocity('transition.flipYIn');
+		$('#hitCard3').velocity('transition.flipYIn');
+		$('#card2').velocity('transition.flipYIn');
+		$('#hitCard2').attr('img', src = player.split2[0].image)
+		$('#hitCard3').attr('img', src = player.split2[1].image)
+		$('#card2').attr('img', src = player.split1[1].image)
 	}
 };
 
@@ -374,6 +418,24 @@ $('#deal').on('click', () => {
 	game.reset();
 })
 
+$('#split').on('click', () => {
+	player.split();
+	player.hitOnSplit();
+	game.hideButtons();
+	game.showSplitButtons();
+	game.moveSplitCards();
+	console.log(player.split1)
+	console.log(player.split2)
+})
 
+$('#100').on('click', () => {
+	player.betAmount += 100;
+	game.changeBetValue();
+})
+
+$('#1000').on('click', () => {
+	player.betAmount += 1000;
+	game.changeBetValue();
+})
 
 game.play();
