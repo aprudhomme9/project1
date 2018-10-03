@@ -274,7 +274,9 @@ const game = {
 		$('#stay').show();
 		$('#deal').hide();
 		player.betAmount = 0;
-		$('#betAmount').text('Bet: $0')
+		$('#betAmount').text('Bet: $0');
+		$('#playerHand').text('Player: ');
+		$('#dealerHand').text('Dealer: ');
 		this.clearHands();
 		this.deal();
 		this.renderCards();
@@ -286,6 +288,10 @@ const game = {
 		player.hand=[];
 		dealer.hand=[];
 		player.hasHit = null;
+	},
+	showValues() {
+		$('#playerHand').text('Player: ' + player.getHandTotal());
+		$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
 	},
 	makeNewDeck() {
 		this.clearHands();
@@ -377,8 +383,6 @@ const game = {
 			dealer.hand.push(deck[0]);
 			deck.splice(0,1);
 		}
-			$('#playerHand').text('Player: ' + player.getHandTotal());
-			$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
 			$('#deck').text('Deck: ' + deck.length);
 	},
 	dealerFlipCard() {
@@ -460,6 +464,7 @@ $('#1000').on('click', () => {
 
 $('#placeBet').on('click', () => {
 	game.showCards();
+	game.showValues();
 	$('#placeBet').hide();
 })
 
