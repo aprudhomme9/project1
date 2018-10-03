@@ -244,12 +244,15 @@ const game = {
 		$('#message').hide();
 		$('#hit').show();
 		$('#stay').show();
+		$('#placeBet').show();
 	},
 	play() {
 		buildDeck();
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
+		this.hideCards();
+		console.log('playyyiinng');
 	},
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
@@ -257,25 +260,26 @@ const game = {
 			$('#hit').hide();
 			$('#stay').hide();
 			this.updateStats();
+			console.log('checkinnngng')
 		}
 	},
 	// this will reset after a winner is decided so that we can play again
 	reset() {
+		console.log('reseetttinnng');
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
 		};
-		this.betScreen();
 		$('#hit').show();
 		$('#stay').show();
 		$('#deal').hide();
 		player.betAmount = 0;
 		$('#betAmount').text('Bet: $0')
 		this.clearHands();
-		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-	},	// this.checkWinner();
+		this.hideCards();
+	},	
 	clearHands() {
 		player.split1=[];
 		player.split2=[];
@@ -316,6 +320,7 @@ const game = {
 		}
 	},
 	updateStats() {
+		console.log('updaaattiing');
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(this.playerWins()) {
 			player.bank += player.betAmount;
@@ -365,6 +370,7 @@ const game = {
 		} return array;
 	},
 	deal() {
+		console.log('deeeallinnngg');
 		for(let i = 0; i < 2; i ++) {
 			player.hand.push(deck[0]);
 			deck.splice(0, 1);
@@ -379,26 +385,17 @@ const game = {
 		$('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer1').velocity('transition.flipYIn', 1000);
 	},
-	betScreen() {
+	hideCards() {
 		$('#card1').attr('src', 'images/card-back.png');
 		$('#card2').attr('src', 'images/card-back.png');
 		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', 'images/card-back.png');
-		$('#hitCard1').hide();
-		$('#hitCard2').hide();
-		$('#hitCard3').hide();
-		$('#dealerHit3').hide();
-		$('#dealerHit').hide();
-		$('#dealerHit2').hide();
-		$('#splitHit').hide();
-		$('#splitStay').hide();
-		$('#split').hide();
-		$('#message').hide();
-		$('#hit').hide();
-		$('#stay').hide();
-		$('#deal').hide();
-		$('#placeBet').show();
-
+	},
+	showCards() {
+		$('#card1').attr('src', player.hand[0].image);
+		$('#card2').attr('src', player.hand[1].image);
+		// $('#dealer1').attr('src', dealer.hand[0].image);
+		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
 	changeBetValue() {
 		$('#betAmount').text('Bet: $' + player.betAmount);
@@ -462,6 +459,7 @@ $('#1000').on('click', () => {
 })
 
 $('#placeBet').on('click', () => {
+	game.showCards();
 	$('#placeBet').hide();
 })
 
