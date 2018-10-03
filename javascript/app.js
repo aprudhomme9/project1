@@ -121,9 +121,6 @@ const player = {
 			total = total - (10 * aces);
 		} return total;
 	},
-	// player hits. can not hit if they bust. bust message will appear.
-	// create state of hasHit to allow for the 4th card played to render. should do same for dealer
-
 	hit () {
 		if(this.hasHit === null && this.getHandTotal() < 21) {
 			this.hand.push(deck[0]);
@@ -138,8 +135,8 @@ const player = {
 			$('#hitCard2').attr('src', this.hand[3].image);
 			$('#hitCard2').velocity('transition.flipYIn', 1000);
 		} if (this.hand.length >= 5) {
-				$('#hitCard3').attr('src', this.hand[4].image);
-				$('#hitCard3').velocity('transition.flipYIn', 1000);
+			$('#hitCard3').attr('src', this.hand[4].image);
+			$('#hitCard3').velocity('transition.flipYIn', 1000);
 		}
 	},
 	doubleDown() {
@@ -158,10 +155,14 @@ const dealer = {
 			if(this.hand[i].value === 'A') {
 				aces += 1;
 			}
+
 			total = total + this.hand[i].weight;
 		}
+
 		if(aces > 0 && total > 21) {
+			
 			total = total - (10 * aces);
+
 		} return total;
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
@@ -219,6 +220,8 @@ const game = {
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
 			$('#deal').show();
+			$('#hit').hide();
+			$('#stay').hide();
 			this.updateStats();
 		}
 	},
@@ -228,7 +231,8 @@ const game = {
 			deck = [];
 			this.makeNewDeck();
 		};
-
+		$('#hit').show();
+		$('#stay').show();
 		$('#deal').hide();
 		this.clearHands();
 		this.shuffle(deck);
