@@ -226,11 +226,6 @@ The weight of the ace is 1
 
 // begin building game object
 const game = {
-	start() {
-		buildDeck();
-		this.shuffle(deck);
-		this.betScreen();
-	},
 	renderCards() {
 		$('#splitHit').hide();
 		$('#splitStay').hide();
@@ -251,9 +246,10 @@ const game = {
 		$('#stay').show();
 	},
 	play() {
+		buildDeck();
+		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-		this.checkWinner();
 	},
 	checkWinner() {
 		if(this.playerWins() || this.dealerWins() || this.push() || this.playerBust() || this.dealerBust()) {
@@ -261,7 +257,6 @@ const game = {
 			$('#hit').hide();
 			$('#stay').hide();
 			this.updateStats();
-			this.betScreen();
 		}
 	},
 	// this will reset after a winner is decided so that we can play again
@@ -269,20 +264,18 @@ const game = {
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
-			this.shuffle(deck);
 		};
+		this.betScreen();
 		$('#hit').show();
 		$('#stay').show();
 		$('#deal').hide();
-		this.betScreen();
 		player.betAmount = 0;
-		$('#betAmount').text('Bet: $0');
+		$('#betAmount').text('Bet: $0')
 		this.clearHands();
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-		this.checkWinner();
-	},
+	},	// this.checkWinner();
 	clearHands() {
 		player.split1=[];
 		player.split2=[];
@@ -469,8 +462,8 @@ $('#1000').on('click', () => {
 })
 
 $('#placeBet').on('click', () => {
-	game.play();
 	$('#placeBet').hide();
 })
 
-game.start();
+
+game.play();
