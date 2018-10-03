@@ -226,6 +226,11 @@ The weight of the ace is 1
 
 // begin building game object
 const game = {
+	start() {
+		buildDeck();
+		this.shuffle(deck);
+		this.betScreen();
+	},
 	renderCards() {
 		$('#splitHit').hide();
 		$('#splitStay').hide();
@@ -242,10 +247,10 @@ const game = {
 		$('#dealer1').attr('src', 'images/card-back.png');
 		$('#dealer2').attr('src', dealer.hand[1].image);
 		$('#message').hide();
+		$('#hit').show();
+		$('#stay').show();
 	},
 	play() {
-		buildDeck();
-		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
 		this.checkWinner();
@@ -256,6 +261,7 @@ const game = {
 			$('#hit').hide();
 			$('#stay').hide();
 			this.updateStats();
+			this.betScreen();
 		}
 	},
 	// this will reset after a winner is decided so that we can play again
@@ -263,16 +269,19 @@ const game = {
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
+			this.shuffle(deck);
 		};
 		$('#hit').show();
 		$('#stay').show();
 		$('#deal').hide();
+		this.betScreen();
 		player.betAmount = 0;
+		$('#betAmount').text('Bet: $0');
 		this.clearHands();
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
-		// this.checkWinner();
+		this.checkWinner();
 	},
 	clearHands() {
 		player.split1=[];
@@ -377,6 +386,30 @@ const game = {
 		$('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer1').velocity('transition.flipYIn', 1000);
 	},
+	betScreen() {
+		$('#card1').attr('src', 'images/card-back.png');
+		$('#card2').attr('src', 'images/card-back.png');
+		$('#dealer1').attr('src', 'images/card-back.png');
+		$('#dealer2').attr('src', 'images/card-back.png');
+		$('#hitCard1').hide();
+		$('#hitCard2').hide();
+		$('#hitCard3').hide();
+		$('#dealerHit3').hide();
+		$('#dealerHit').hide();
+		$('#dealerHit2').hide();
+		$('#splitHit').hide();
+		$('#splitStay').hide();
+		$('#split').hide();
+		$('#message').hide();
+		$('#hit').hide();
+		$('#stay').hide();
+		$('#deal').hide();
+		$('#placeBet').show();
+
+	},
+	changeBetValue() {
+		$('#betAmount').text('Bet: $' + player.betAmount);
+	},
 	hideButtons() {
 		$('#hit').hide();
 		$('#stay').hide();
@@ -384,9 +417,6 @@ const game = {
 	showSplitButtons() {
 		$('#splitHit').show();
 		$('#splitStay').show();
-	},
-	changeBetValue() {
-		$('#betAmount').text('Bet: $' + player.betAmount);
 	},
 	moveSplitCards() {
 		$('#hitCard2').velocity('transition.flipYIn');
@@ -438,4 +468,9 @@ $('#1000').on('click', () => {
 	game.changeBetValue();
 })
 
-game.play();
+$('#placeBet').on('click', () => {
+	game.play();
+	$('#placeBet').hide();
+})
+
+game.start();
