@@ -108,28 +108,40 @@ const player = {
 	hand: [],
 	stay: null,
 	hasHit: null,
-	getHandVal () {
+	numberAces: 0,
+	checkAces() {
+		for(let j = 0; j < this.hand.length; j++) {
+			if(this.hand[j].value === 'A') {
+				this.numberAces += 1;
+				return true;
+				console.log('heres an ace')
+			} 
+		}
+	},
+	getHandTotal() {
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
-			total = total + this.hand[i].weight;
-		} 
-		return total;
+				total = total + this.hand[i].weight;
+		}
+		if(this.numberAces > 0 && this.getHandTotal() > 21) {
+			total = total - (10 * this.numberAces);
+		} return total;
 	},
 	// player hits. can not hit if they bust. bust message will appear.
 	// create state of hasHit to allow for the 4th card played to render. should do same for dealer
 
 	hit () {
-		if(this.hasHit === null && this.getHandVal() < 21) {
+		if(this.hasHit === null && this.getHandTotal() < 21) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
-			$('#playerHand').text('Player: ' + player.getHandVal());
-			$('#hitCard1').attr('src', player.hand[2].image);
+			$('#playerHand').text('Player: ' + this.getHandTotal());
+			$('#hitCard1').attr('src', this.hand[2].image);
 			$('#hitCard1').velocity('transition.flipYIn', 1000);
 		} else if(this.hasHit) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
-			$('#playerHand').text('Player: ' + player.getHandVal());
-			$('#hitCard2').attr('src', player.hand[3].image);
+			$('#playerHand').text('Player: ' + this.getHandTotal());
+			$('#hitCard2').attr('src', this.hand[3].image);
 			$('#hitCard2').velocity('transition.flipYIn', 1000);
 		}
 	},
@@ -140,36 +152,36 @@ const player = {
 
 	}
 }
-
 const dealer = {
 	hand: [],
+	numberAces: 0,
 	checkAces() {
 		for(let i = 0; i < this.hand.length; i++) {
 			if(this.hand[i].value === 'A') {
+				this.numberAces += 1;
 				return true;
 			}
 		}
 	},
-	getHandVal () {
+	getHandTotal() {
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
-			total = total + this.hand[i].weight;
-		}
-		return total;
+				total = total + this.hand[i].weight;
+		} return total;
 	},
 	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
 	hit() {
-		while(this.getHandVal() <= 17 && this.getHandVal() <= player.getHandVal() && player.getHandVal() <= 21) {
+		while(this.getHandTotal() <= 17 && this.getHandTotal() <= player.getHandTotal() && player.getHandTotal() <= 21) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);
-			$('#dealerHit').attr('src', dealer.hand[2].image);
+			$('#dealerHit').attr('src', this.hand[2].image);
 			$('#dealerHit').velocity('transition.flipYIn', 1000);	
 			}
 // can I do this with a loop...
-			if(dealer.hand.length >= 4) {
-				$('#dealerHit2').attr('src', dealer.hand[3].image);
+			if(this.hand.length >= 4) {
+				$('#dealerHit2').attr('src', this.hand[3].image);
 				$('#dealerHit2').velocity('transition.flipYIn', 1000);
-		} $('#dealerHand').text('Dealer: ' + dealer.getHandVal());
+		} $('#dealerHand').text('Dealer: ' + this.getHandTotal());
 	}
 }
 
@@ -183,7 +195,6 @@ The weight of the ace is 1
 ********************/
 
 // begin building game object
-// need a better way to have dealer process automate
 const game = {
 	renderCards() {
 		$('#deal').hide();
@@ -199,6 +210,7 @@ const game = {
 	play() {
 		buildDeck();
 		this.shuffle(deck);
+		player.checkAces();
 		this.deal();
 		this.renderCards();
 		this.checkWinner();
@@ -214,18 +226,22 @@ const game = {
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
-		}
+		};
+
 		$('#deal').hide();
 		this.clearHands();
 		this.shuffle(deck);
 		this.deal();
 		this.renderCards();
+		player.checkAces();
 		// this.checkWinner();
 	},
 	clearHands() {
 		player.hand=[];
 		dealer.hand=[];
 		player.hasHit = null;
+		player.numberAces = 0;
+		dealer.numberAces = 0;
 	},
 	makeNewDeck() {
 		this.clearHands();
@@ -235,27 +251,27 @@ const game = {
 		this.renderCards();
 	},
 	playerWins() {
-		if(player.stay === true && player.getHandVal() <= 21 && player.getHandVal() > dealer.getHandVal()) {
+		if(player.stay === true && player.getHandTotal() <= 21 && player.getHandTotal() > dealer.getHandTotal()) {
 			return true;		
 		}
 	},
 	dealerWins() {
-		if(player.stay === true && dealer.getHandVal() > player.getHandVal() && dealer.getHandVal() <= 21) {
+		if(player.stay === true && dealer.getHandTotal() > player.getHandTotal() && dealer.getHandTotal() <= 21) {
 			return true;
 		}
 	},
 	push() {
-		if(player.stay === true && dealer.getHandVal() === player.getHandVal()) {
+		if(player.stay === true && dealer.getHandTotal() === player.getHandTotal()) {
 			return true;
 		}
 	},
 	playerBust() {
-		if(!this.playerWins() && player.getHandVal() > 21) {
+		if(!this.playerWins() && player.getHandTotal() > 21) {
 			return true;
 		}
 	},
 	dealerBust() {
-		if(!this.dealerWins() && dealer.getHandVal() > 21) {
+		if(!this.dealerWins() && dealer.getHandTotal() > 21) {
 			return true
 		}
 	},
@@ -263,36 +279,36 @@ const game = {
 		// just testing to make sure we can compare hand values and get a result after one deal
 		if(this.playerWins()) {
 			player.bank += 100;
-			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').velocity('callout.flash', 2000);
 			$('#message').text('YOU WIN');
 			$('#message').velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerWins()) {
 			player.bank -= 100;
-			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').velocity('callout.flash', 2000);
 			$('#message').text('DEALER WINS');
 			$('#message').velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.push()) {
-			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').velocity('callout.shake', 2000);
 			$('#message').text('PUSH');
 			$('#message').velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
-		} else if(player.getHandVal() > 21) {
+		} else if(player.getHandTotal() > 21) {
 			player.bank -= 100;
-			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').velocity('callout.flash', 2000)
 			player.stay === true;
 			this.dealerFlipCard();
 			$('#message').text('YOU BUST');
 			$('#message').velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
-		} else if (dealer.getHandVal() > 21) {
+		} else if (dealer.getHandTotal() > 21) {
 			player.bank += 100;
-			$('#bank').text('BANK: $'+player.bank);
+			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').velocity('callout.flash', 2000);
 			$('#message').text('DEALER BUSTS');
 			$('#message').velocity('transition.swoopIn', 2000);
@@ -300,7 +316,7 @@ const game = {
 		}
 	},
 	shuffle(array) {
-		for(i = array.length - 1; i > 0; i--) {
+		for(let i = array.length - 1; i > 0; i--) {
 			let rand = Math.floor(Math.random() * i);
 			let temp = array[i];
 			array[i] = array[rand];
@@ -314,27 +330,21 @@ const game = {
 			deck.splice(0, 1);
 			dealer.hand.push(deck[0]);
 			deck.splice(0,1);
-		} 
-			$('#playerHand').text('Player: ' + player.getHandVal());
+		}
+			$('#playerHand').text('Player: ' + player.getHandTotal());
 			$('#dealerHand').text('Dealer: ' + dealer.hand[1].weight);
 			$('#deck').text('Deck: ' + deck.length);
 	},
 	dealerFlipCard() {
 		$('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer1').velocity('transition.flipYIn', 1000);
-	},
-	showWinner() {
-		if(this.playerWins()) {
-
-		}
 	}
-
 };
 
 $('#hit').on('click', () => {
 	player.hit();
 	player.hasHit = true;
-	if(player.getHandVal() > 21) {
+	if(player.getHandTotal() > 21) {
 		game.dealerFlipCard();
 		game.checkWinner();
 	}
@@ -350,9 +360,7 @@ $('#stay').on('click', () => {
 $('#deal').on('click', () => {
 	game.reset();
 })
-// bet button --> need
-// 
-// render cards
+
 
 
 game.play();
