@@ -86,21 +86,10 @@ const buildDeck = () => {
 	deck[51].image = "images/ace-clubs.png" 
 }
 
+/**************************************************************
+Player Object:
 
-
-
-// console.log(deck);
-
-/********* 
-shuffle using fisher-yates
-generate random int
-set temporary card to array[index]
-set array[index] to array[random int]
-set array[random int] to temporary card
-return array
-
-MOVED SHUFFLE FUNCTION INTO GAME OBJECT AS GAME METHOD
-**********/ 
+**************************************************************/ 
 
 const player = {
 	bank: 1000,
@@ -108,8 +97,7 @@ const player = {
 	hand: [],
 	stay: null,
 	hasHit: null,
-	split1: [],
-	split2: [],
+	hasBet: null,
 	getHandTotal() {
 		let aces = 0;
 		let total = 0;
@@ -140,43 +128,24 @@ const player = {
 			$('#hitCard3').attr('src', this.hand[4].image);
 			$('#hitCard3').velocity('transition.flipYIn', 1000);
 		}
-	},
-	doubleDown() {
-
-	},
-	split() {
-		// move first card into new hand and second card into new hand
-		// need to hit for both hands by pushing card from deck into both
-		// first, the first split card is shown and hit
-		// player can then hit or stay on that hand
-		// if hit, another card is added and you need to check winner
-		// if stay, the second split card is brought in
-		// then, the second split card is shown and hit
-		// player can then hit or stay on that hand
-		// if hit, another card is added and winner is checked
-		this.split1.push(this.hand[0]);
-		this.split2.push(this.hand[1]);
-		$('#playerHand').text('Player: ' + this.split1[0].weight + ', ' + this.split2[0].weight);
-	},
-	hitOnSplit() {
-		this.split1.push(deck[0]);
-		deck.splice(0, 1);
-		this.split2.push(deck[0]);
-		deck.splice(0, 1);
-	},
-	getSplitValue() {
-		let firstTotal = 0;
-		let secondTotal = 0;
-		for(let i = 0; i < split1.length; i++) {
-			firstTotal = firstTotal + this.split1[i].weight;
-			secondTotal = secondTotal + this.split2[i].weight;
-		} console.log(firstTotal);
-			console.log(secondTotal);
 	}
-}
+};
+/**************************************************************
+Dealer Object:
+
+**************************************************************/
+
 const dealer = {
 	hand: [],
 	getHandTotal() {
+/********************
+Ace logic...
+If the hand of the player or dealer is > 21 and contains one or more aces, the weight of the aces converts to 1 rather than 11.
+Check if hand is > 21
+Check if hand contains ace using a loop
+If it contains an ace
+Subtract 10 from calculated total for each ace
+*******************/
 		let aces = 0;
 		let total = 0;
 		for(let i = 0; i < this.hand.length; i++) {
@@ -193,20 +162,19 @@ const dealer = {
 
 		} return total;
 	},
-	// if the dealers hand is less than or equal to seventeen and is less than or equal to player hand, the dealer will hit
 	hit() {
 		while(this.getHandTotal() <= 17 && this.getHandTotal() <= player.getHandTotal() && player.getHandTotal() <= 21) {
 			this.hand.push(deck[0]);
-			deck.splice(0, 1);
+			deck.splice(0, 1);	
 			$('#dealerHit').attr('src', this.hand[2].image);
-			$('#dealerHit').delay(1000).velocity('transition.flipYIn', 1000);	
-			}
+			$('#dealerHit').delay(1000).velocity('transition.flipYIn', 1000);
+			};
 
-		if(this.hand.length >= 4) {
+		if(this.hand.length === 4) {
 			$('#dealerHit2').attr('src', this.hand[3].image);
 			$('#dealerHit2').delay(1000).velocity('transition.flipYIn', 1000);
 		} 
-		if(this.hand.length >= 5) {
+		else if(this.hand.length === 5) {
 			$('#dealerHit3').attr('src', this.hand[4].image);
 			$('#dealerHit3').delay(1000).velocity('transition.flipYIn', 1000);
 		}
@@ -215,16 +183,13 @@ const dealer = {
 	}
 }
 
-/********************
-Ace logic...
-If the hand of the player or dealer is > 21 and contains one or more aces, the weight of the aces converts to 1 rather than 11.
-Check if hand is > 21
-Check if hand contains ace using a loop
-If it contains an ace
-The weight of the ace is 1
-********************/
+/********* 
+Game Object:
+Render cards will render cards and buttons on the screen in standard play format
+Play will build deck, shuffle, deal, and render cards (though cards hide on bet screen at beginning)
+Reset method will essentially do what play does but won't rebuild deck or shuffle until the deck is under 20 cards
 
-// begin building game object
+**********/
 const game = {
 	renderCards() {
 		$('#splitHit').hide();
@@ -259,11 +224,15 @@ const game = {
 			$('#deal').show();
 			$('#hit').hide();
 			$('#stay').hide();
+			$('#dealerHand').delay(2000).text('Dealer: ' + dealer.getHandTotal());
 			this.updateStats();
 			console.log('checkinnngng')
 		}
 	},
-	// this will reset after a winner is decided so that we can play again
+/********************
+Reset Method:
+
+*******************/
 	reset() {
 		console.log('reseetttinnng');
 		if(deck.length < 20) {
@@ -274,6 +243,7 @@ const game = {
 		$('#stay').show();
 		$('#deal').hide();
 		player.betAmount = 0;
+		player.hasBet = null;
 		$('#betAmount').text('Bet: $0');
 		$('#playerHand').text('Player: ');
 		$('#dealerHand').text('Dealer: ');
@@ -325,47 +295,52 @@ const game = {
 			return true
 		}
 	},
+	/**********************************
+	There has to be a decent way to dry this horrible horrible method up...
+	**********************************/
 	updateStats() {
 		console.log('updaaattiing');
-		// just testing to make sure we can compare hand values and get a result after one deal
 		if(this.playerWins()) {
 			player.bank += player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('YOU WIN');
-			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
+			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerWins()) {
 			player.bank -= player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER WINS');
-			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
+			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.push()) {
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.shake', 2000);
 			$('#message').text('PUSH');
-			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
+			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if(this.playerBust()) {
 			player.bank -= player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000)
 			player.stay === true;
-			this.dealerFlipCard();
+			// this.dealerFlipCard();
 			$('#message').text('YOU BUST');
-			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
+			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		} else if (this.dealerBust()) {
 			player.bank += player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000);
 			$('#message').text('DEALER BUSTS');
-			$('#message').delay(2000).velocity('transition.swoopIn', 2000);
+			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		}
 	},
+	/****************
+	Fisher-Yates algorithm to shuffle the deck
+	*****************/
 	shuffle(array) {
 		for(let i = array.length - 1; i > 0; i--) {
 			let rand = Math.floor(Math.random() * i);
@@ -401,72 +376,63 @@ const game = {
 		// $('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
+	gameOver() {
+		if(player.bank <= 0) {
+			alert('game over');
+		}
+	},
 	changeBetValue() {
 		$('#betAmount').text('Bet: $' + player.betAmount);
-	},
-	hideButtons() {
-		$('#hit').hide();
-		$('#stay').hide();
-	},
-	showSplitButtons() {
-		$('#splitHit').show();
-		$('#splitStay').show();
-	},
-	moveSplitCards() {
-		$('#hitCard2').velocity('transition.flipYIn');
-		$('#hitCard3').velocity('transition.flipYIn');
-		$('#card2').velocity('transition.flipYIn');
-		$('#hitCard2').attr('img', src = player.split2[0].image)
-		$('#hitCard3').attr('img', src = player.split2[1].image)
-		$('#card2').attr('img', src = player.split1[1].image)
 	}
 };
 
 $('#hit').on('click', () => {
-	player.hit();
+	if(player.hasBet === true) {
+		player.hit();
 	player.hasHit = true;
 	if(player.getHandTotal() > 21) {
 		game.dealerFlipCard();
 		game.checkWinner();
+		}
 	}
 })
 
 $('#stay').on('click', () => {
-	player.stay = true;
-	game.dealerFlipCard();
-	dealer.hit();
-	game.checkWinner();
+	if(player.hasBet === true) {
+		player.stay = true;
+		game.dealerFlipCard();
+		dealer.hit();
+		game.checkWinner();
+	}
 })
 
 $('#deal').on('click', () => {
 	game.reset();
 })
 
-$('#split').on('click', () => {
-	player.split();
-	player.hitOnSplit();
-	game.hideButtons();
-	game.showSplitButtons();
-	game.moveSplitCards();
-	console.log(player.split1)
-	console.log(player.split2)
-})
-
 $('#100').on('click', () => {
+	if(player.bank >= player.betAmount + 100) {
 	player.betAmount += 100;
 	game.changeBetValue();
+	};
 })
 
 $('#1000').on('click', () => {
+	if(player.bank >= player.betAmount + 1000) {
 	player.betAmount += 1000;
 	game.changeBetValue();
+	};
 })
 
 $('#placeBet').on('click', () => {
+	if(player.betAmount > 0) {
 	game.showCards();
 	game.showValues();
 	$('#placeBet').hide();
+	player.hasBet = true;
+	} else alert('Please enter your bet amount by clicking the chip(s)');
 })
 
 
 game.play();
+game.gameOver();
