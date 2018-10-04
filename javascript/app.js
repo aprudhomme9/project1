@@ -466,6 +466,21 @@ $('#placeBet').on('click', () => {
 	} else alert('Please enter your bet amount by clicking the chip(s)');
 })
 
+$('#rules').on('click', () => {
+	$('.modal').show();
+})
+
+$('.close').on('click', () => {
+	$('.modal').hide();
+})
 
 
+
+
+
+
+
+
+
+$('.modal').hide();
 game.play();
