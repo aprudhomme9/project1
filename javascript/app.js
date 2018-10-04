@@ -466,7 +466,6 @@ $('#placeBet').on('click', () => {
 	} else alert('Please enter your bet amount by clicking the chip(s)');
 })
 
-$('#restart').on('click', window.refresh);
 
 
 game.play();
