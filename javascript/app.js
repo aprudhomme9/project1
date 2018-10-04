@@ -265,6 +265,7 @@ Reset Method:
 			deck = [];
 			this.makeNewDeck();
 			this.count = 0;
+			$('#count').text('Count: 0');
 		};
 		$('#hit').show();
 		$('#stay').show();

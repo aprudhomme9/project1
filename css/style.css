@@ -51,6 +51,7 @@ button {
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
+	text-align: center;
 }
 
 #playerHand, #dealerHand {
@@ -95,7 +96,8 @@ button {
 
 #rules {
 	display: flex;
-	justify-content: flex-end;
+	right: 15px;
+	text-align: center;
 }
 
 #blackjack {
