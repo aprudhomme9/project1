@@ -110,6 +110,8 @@ const player = {
 		if(aces > 0 && total > 21) {
 			total = total - (10 * aces);
 		} return total;
+
+		// game.updateCount();
 	},
 	hit () {
 		if(this.hasHit === null && this.getHandTotal() < 21) {
@@ -161,6 +163,8 @@ Subtract 10 from calculated total for each ace
 			total = total - (10 * aces);
 
 		} return total;
+
+		// game.updateCount();
 	},
 	hit() {
 		while(this.getHandTotal() <= 17 && this.getHandTotal() < player.getHandTotal() && player.getHandTotal() <= 21) {
@@ -191,6 +195,25 @@ Reset method will essentially do what play does but won't rebuild deck or shuffl
 
 **********/
 const game = {
+	count: 0,
+	updateCount() {
+		for(let i = 0; i < player.hand.length; i++) {
+			if(player.hand[i].weight <= 6) {
+				this.count += 1;
+			} else if(player.hand[i].weight >= 10) {
+				this.count -=1;
+			}
+		}
+
+		for(let i = 0; i < dealer.hand.length; i++) {
+			if(dealer.hand[i].weight <= 6) {
+				this.count += 1;
+			} else if(dealer.hand[i].weight >= 10) {
+				this.count -=1;
+			}
+		}
+		$('#count').text('Count: ' + this.count);
+	},
 	renderCards() {
 		$('#splitHit').hide();
 		$('#splitStay').hide();
@@ -210,6 +233,7 @@ const game = {
 		$('#hit').show();
 		$('#stay').show();
 		$('#placeBet').show();
+		$('#restart').hide();
 	},
 	play() {
 		buildDeck();
@@ -238,6 +262,7 @@ Reset Method:
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
+			this.count = 0;
 		};
 		$('#hit').show();
 		$('#stay').show();
@@ -299,6 +324,9 @@ Reset Method:
 	There has to be a decent way to dry this horrible horrible method up...
 	**********************************/
 	updateStats() {
+		if(player.bank === 0) {
+			this.gameOver();
+		};
 		console.log('updaaattiing');
 		if(this.playerWins()) {
 			player.bank += player.betAmount;
@@ -337,6 +365,8 @@ Reset Method:
 			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
 		}
+
+		this.updateCount();
 	},
 	/****************
 	Fisher-Yates algorithm to shuffle the deck
@@ -377,9 +407,7 @@ Reset Method:
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
 	gameOver() {
-		if(player.bank === 0) {
-			alert('game over');
-		}
+		$('#restart').show();
 	},
 	changeBetValue() {
 		$('#betAmount').text('Bet: $' + player.betAmount);
@@ -424,6 +452,11 @@ $('#1000').on('click', () => {
 	};
 })
 
+$('#add').on('click', () => {
+	player.bank += 100;
+	$('#bank').text('BANK: $' + player.bank);
+})
+
 $('#placeBet').on('click', () => {
 	if(player.betAmount > 0) {
 	game.showCards();
@@ -433,6 +466,7 @@ $('#placeBet').on('click', () => {
 	} else alert('Please enter your bet amount by clicking the chip(s)');
 })
 
+$('#restart').on('click', window.refresh);
+
 
 game.play();
-game.gameOver();

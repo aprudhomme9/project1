@@ -96,3 +96,12 @@ button {
 	display: flex;
 	justify-content: flex-end;
 }
+
+#blackjack {
+	font-family: 'Lobster', cursive;
+	display: inline;
+	float: right;
+	margin-right: 50px;
+	align-content: center;
+	justify-content: center;
+}
