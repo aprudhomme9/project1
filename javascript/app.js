@@ -163,7 +163,7 @@ Subtract 10 from calculated total for each ace
 		} return total;
 	},
 	hit() {
-		while(this.getHandTotal() <= 17 && this.getHandTotal() <= player.getHandTotal() && player.getHandTotal() <= 21) {
+		while(this.getHandTotal() <= 17 && this.getHandTotal() < player.getHandTotal() && player.getHandTotal() <= 21) {
 			this.hand.push(deck[0]);
 			deck.splice(0, 1);	
 			$('#dealerHit').attr('src', this.hand[2].image);
@@ -377,7 +377,7 @@ Reset Method:
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
 	gameOver() {
-		if(player.bank <= 0) {
+		if(player.bank === 0) {
 			alert('game over');
 		}
 	},
