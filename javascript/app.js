@@ -88,6 +88,10 @@ const buildDeck = () => {
 
 /**************************************************************
 Player Object:
+Bank amount
+hand
+keep track of if player has hit and has bet
+bet amount
 
 **************************************************************/ 
 
@@ -111,7 +115,6 @@ const player = {
 			total = total - (10 * aces);
 		} return total;
 
-		// game.updateCount();
 	},
 	hit () {
 		if(this.hasHit === null && this.getHandTotal() < 21) {
@@ -164,7 +167,6 @@ Subtract 10 from calculated total for each ace
 
 		} return total;
 
-		// game.updateCount();
 	},
 	hit() {
 		while(this.getHandTotal() <= 17 && this.getHandTotal() < player.getHandTotal() && player.getHandTotal() <= 21) {
@@ -353,7 +355,6 @@ Reset Method:
 			$('#bank').text('BANK: $'+ player.bank);
 			$('#bank').delay(2000).velocity('callout.flash', 2000)
 			player.stay === true;
-			// this.dealerFlipCard();
 			$('#message').text('YOU BUST');
 			$('#message').delay(1000).velocity('transition.swoopIn', 2000);
 			$('#message').velocity('transition.swoopOut')
@@ -403,7 +404,6 @@ Reset Method:
 	showCards() {
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
-		// $('#dealer1').attr('src', dealer.hand[0].image);
 		$('#dealer2').attr('src', dealer.hand[1].image);
 	},
 	gameOver() {
