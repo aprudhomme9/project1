@@ -9,7 +9,7 @@
 	padding: 25px;
 	margin: 45px;
 }
-body {
+.gameSpace {
 	font-family: 'Archivo', sans-serif;
 	border: 2px dashed lavender;
 	background-color: #38393a;

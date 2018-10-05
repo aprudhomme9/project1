@@ -1,52 +1,54 @@
-Black Jack
+### Game board looks as follows 
+Dealer cards on top left, player cards bottom left.
 
-Bet Screen:
+In center, there are buttons to hit, stay, place bet, and two chips on which the user can click to increase bet amount.
 
-Game begins by user placing a bet. The user has an initial bank of $1000.
+On the right, the dealer hand amount and player hand amount will be shown on the top and bottom, respectively.
 
-User can click chips worth $1, $5, $25, $50, $100, $500. These values get added to the user's Total Bet amount, which can not exceed their bank. Bank is updated after every hand is played.
+# Black Jack
 
-Play Screen:
+### Bet Screen:
 
-Once the user has their bet amount set, they can click the deal button, which will deal two cards to the user and two cards to the dealer. These cards are removed from the deck.
+![Bet Screen](https://www.dropbox.com/s/p0mrf7gwy4kgf8w/Screenshot%202018-10-05%2008.27.50.png?dl=0)
 
-The cards will be dealt out of the deck, which will hold 3 traditional decks.  Cards will deal at random into dealer hand and player hand. Dealer will have only one card turned over.
+* Cards are face down prior to bet being placed by user.
 
-	If the user has 21, dealer will flip cards. If dealer hand = 21, then the player pushes. No change to player bank. Return to bet screen to bet & deal again.
+* Game begins by user placing a bet. The user has an initial bank of $1000.
 
-	If the user does not have 21, they have the option to hit, stay, or double down. Or split.
+* User can click chips worth $100 or $1000. These values get added to the user's Total Bet amount, which can not exceed their bank. Bank is updated after every hand is played.
 
-	User Hits:
+### Play Screen:
 
-	If user hits, another card will be dealt to user. Can continue to hit if hand amount < 21.
+![Play Screen](https://www.dropbox.com/s/o91y8n76zdiugbl/Screenshot%202018-10-05%2008.29.34.png?dl=0)
 
-		If new value > 21, the player busts	and the dealer wins. The bet amount is subtracted from player's bank.
+* Once the user has their bet amount set, they can click the place bet button, which will deal (flip) two cards to the user and two cards to the dealer. These cards are removed from the deck.
 
-		If new value < 21, the player has the option to hit or stay again, and the process is repeated.
+* The cards will be dealt out of the deck, which will hold one traditional deck. A new deck is played when the cards remaining drops below 20. Each new deck is shuffled before any cards are dealt. Cards are dealt off the top of the deck.
 
-		If user hits again and is <= 21, hand is evaluated. Dealer flips, and hand is evaluated.
+	* If the user has 21, dealer will flip cards. If dealer hand = 21, then the player pushes. No change to player bank. Return to bet screen to bet & deal again.
 
-			If dealer hand < user hand and dealer hand <=17, dealer draws another card, and hand is evaluated.
+	* If the user does not have 21, they have the option to hit, stay, or double down. Or split.
 
-			If dealer hand > user hand, dealer wins. Bet amount subtracted from player's bank.
+### User Hits:
 
-			If dealer hand < user hand, user wins. Bet amount added to player's bank.
+* If user hits, another card will be dealt to user. Can continue to hit if hand amount < 21.
 
-	User Stays:
+	* If new value > 21, the player busts	and the dealer wins. The bet amount is subtracted from player's bank.
 
-	If user stays, the dealer will flip over their face-down card. Their hand will be evaluated.
+	* If new value < 21, the player has the option to hit or stay again, and the process is repeated.
 
-		If dealer hand < user hand AND dealer hand <= 17 , the dealer draws another card, and this is evaluated again.
 
-		If dealer hand is between 18 and 21, dealer hand is compared to player hand. If player hand is greater, player wins. If dealer hand is greater, dealer wins. If hands are equal, push.
+###User Stays:
 
-		If dealer hand > user hand AND dealer hand <= 21, dealer wins and the bet amount is subtracted from player's bank.
+* If user stays, the dealer will flip over their face-down card. Their hand will be evaluated.
 
-		If dealer hand > 21, dealer busts and player wins. Bet amount is added to player's bank.
+	* If dealer hand < user hand AND dealer hand <= 17 , the dealer draws another card, and this is evaluated again.
 
-	User Doubles Down:
+	* If dealer hand is between 18 and 21, dealer hand is compared to player hand. If player hand is greater, player wins. If dealer hand is greater, dealer wins. If hands are equal, push.
 
-	User Splits:
+	* If dealer hand > 21, dealer busts and player wins. Bet amount is added to player's bank.
+
+
 
 
 
