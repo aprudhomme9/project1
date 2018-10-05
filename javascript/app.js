@@ -5,7 +5,6 @@ Use two for loops to loop through values and suits and push into deck array
 Instantiate each card by using the Card constructor method
 Include weight for J Q K A
 **********************************/
-console.log("running");
 class Card {
 	constructor(suit, value, weight) {
 		this.suit = suit;
@@ -252,7 +251,6 @@ const game = {
 			$('#stay').hide();
 			$('#dealerHand').delay(2000).text('Dealer: ' + dealer.getHandTotal());
 			this.updateStats();
-			console.log('checkinnngng')
 		}
 	},
 /********************
@@ -260,7 +258,6 @@ Reset Method:
 
 *******************/
 	reset() {
-		console.log('reseetttinnng');
 		if(deck.length < 20) {
 			deck = [];
 			this.makeNewDeck();
@@ -327,10 +324,6 @@ Reset Method:
 	There has to be a decent way to dry this horrible horrible method up...
 	**********************************/
 	updateStats() {
-		if(player.bank === 0) {
-			this.gameOver();
-		};
-		console.log('updaaattiing');
 		if(this.playerWins()) {
 			player.bank += player.betAmount;
 			$('#bank').text('BANK: $'+ player.bank);
@@ -406,9 +399,6 @@ Reset Method:
 		$('#card1').attr('src', player.hand[0].image);
 		$('#card2').attr('src', player.hand[1].image);
 		$('#dealer2').attr('src', dealer.hand[1].image);
-	},
-	gameOver() {
-		$('#restart').show();
 	},
 	changeBetValue() {
 		$('#betAmount').text('Bet: $' + player.betAmount);
