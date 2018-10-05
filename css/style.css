@@ -130,10 +130,10 @@ button {
 	height: 500px;
 	background-color: white;
 	border-radius: 4px;
-	text-align: center;
+	text-align: left;
 	padding: 10px;
 	color: black;
-	font-size: 22px;
+	font-size: 17px;
 	position: relative;
 }
 

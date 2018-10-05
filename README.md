@@ -50,6 +50,7 @@
 	* Yes, this is known as counting cards, but it is being done algorithmically in this scenario and is meant as a teaching tool for players to recognize when they should take a more aggressive strategy
 
 ### Rules:
+![Rules Screen](images/Rules-Screen.png)
 * The user must have sufficient funds to place bets. They may add funds to their bank by using the add funds button -- this is meant to simulate a a game with working microtransactions 
 
 * There is a rules button in the top right hand corner that, when clicked, pops open a modal with a short summary of how to play BlackJack and what the "count" means.
