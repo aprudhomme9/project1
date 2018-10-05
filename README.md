@@ -1,15 +1,9 @@
-### Game board looks as follows 
-Dealer cards on top left, player cards bottom left.
-
-In center, there are buttons to hit, stay, place bet, and two chips on which the user can click to increase bet amount.
-
-On the right, the dealer hand amount and player hand amount will be shown on the top and bottom, respectively.
 
 # Black Jack
 
 ### Bet Screen:
 
-![Bet Screen](https://www.dropbox.com/s/p0mrf7gwy4kgf8w/Screenshot%202018-10-05%2008.27.50.png?dl=0)
+![Bet Screen](images/Bet-Screen.png)
 
 * Cards are face down prior to bet being placed by user.
 
@@ -19,7 +13,7 @@ On the right, the dealer hand amount and player hand amount will be shown on the
 
 ### Play Screen:
 
-![Play Screen](https://www.dropbox.com/s/o91y8n76zdiugbl/Screenshot%202018-10-05%2008.29.34.png?dl=0)
+![Play Screen](images/Play-Screen.png)
 
 * Once the user has their bet amount set, they can click the place bet button, which will deal (flip) two cards to the user and two cards to the dealer. These cards are removed from the deck.
 
@@ -38,7 +32,7 @@ On the right, the dealer hand amount and player hand amount will be shown on the
 	* If new value < 21, the player has the option to hit or stay again, and the process is repeated.
 
 
-###User Stays:
+### User Stays:
 
 * If user stays, the dealer will flip over their face-down card. Their hand will be evaluated.
 
