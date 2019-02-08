@@ -216,8 +216,6 @@ const game = {
 		$('#count').text('Count: ' + this.count);
 	},
 	renderCards() {
-		$('#splitHit').hide();
-		$('#splitStay').hide();
 		$('#split').hide();
 		$('#deal').hide();
 		$('#card1').attr('src', player.hand[0].image);
@@ -278,8 +276,6 @@ Reset Method:
 		this.hideCards();
 	},	
 	clearHands() {
-		player.split1=[];
-		player.split2=[];
 		player.hand=[];
 		dealer.hand=[];
 		player.hasHit = null;
@@ -450,10 +446,10 @@ $('#add').on('click', () => {
 
 $('#placeBet').on('click', () => {
 	if(player.betAmount > 0) {
-	game.showCards();
-	game.showValues();
-	$('#placeBet').hide();
-	player.hasBet = true;
+		game.showCards();
+		game.showValues();
+		$('#placeBet').hide();
+		player.hasBet = true;
 	} else alert('Please enter your bet amount by clicking the chip(s)');
 })
 
@@ -474,4 +470,7 @@ $('.close').on('click', () => {
 
 
 $('.modal').hide();
+
+
+
 game.play();
